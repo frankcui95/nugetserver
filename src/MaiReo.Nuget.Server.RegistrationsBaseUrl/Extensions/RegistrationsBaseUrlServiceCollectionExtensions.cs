@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    public static class ServiceCollectionExtensions
+    public static class RegistrationsBaseUrlServiceCollectionExtensions
     {
         public static IServiceCollection
         AddNugetServerRegistrationsBaseUrl(
@@ -15,9 +15,9 @@ namespace Microsoft.Extensions.DependencyInjection
             .AddNugetServerCore(
                 opt => opt
                 .Resources
-                .Add(NugetServerResourceTypes.RegistrationsBaseUrl_3_4_0,
+                .Add(NugetServerResourceType.RegistrationsBaseUrl_3_4_0,
                 url ?? "/registration3-gz"))
-            .TryAddTransient<NugetServerRegistrationsBaseUrlMiddleware>();
+            .TryAddTransient<RegistrationsBaseUrlMiddleware>();
 
             return services;
         }

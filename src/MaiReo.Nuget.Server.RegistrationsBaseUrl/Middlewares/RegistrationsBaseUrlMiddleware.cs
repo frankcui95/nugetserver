@@ -1,23 +1,17 @@
 ﻿using MaiReo.Nuget.Server.Core;
-using MaiReo.Nuget.Server.Core;
+using MaiReo.Nuget.Server.RegistrationsBaseUrl;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MaiReo.Nuget.Server.Middlewares
 {
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public class NugetServerRegistrationsBaseUrlMiddleware : IMiddleware
+    public class RegistrationsBaseUrlMiddleware : IMiddleware
     {
         private readonly INugetServerProvider _nugetServerProvider;
 
-        public NugetServerRegistrationsBaseUrlMiddleware(
+        public RegistrationsBaseUrlMiddleware(
             INugetServerProvider nugetServerProvider)
         {
             this._nugetServerProvider = nugetServerProvider;
@@ -26,12 +20,10 @@ namespace MaiReo.Nuget.Server.Middlewares
             HttpContext context,
             RequestDelegate next)
         {
-            if (context
-                .IsRequestingRegistrationsBaseUrl(
-                _nugetServerProvider.NugetServerOptions))
+            if (_nugetServerProvider.IsMatch(context))
             {
                 await _nugetServerProvider
-                      .RespondRegistrationsBaseUrlAsync(context);
+                      .RespondAsync(context);
                 return;
             }
 

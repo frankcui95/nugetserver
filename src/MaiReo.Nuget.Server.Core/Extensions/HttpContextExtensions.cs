@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using MaiReo.Nuget.Server.Core;
-using MaiReo.Nuget.Server.Core.Extensions;
 
 namespace Microsoft.AspNetCore.Http
 {
@@ -27,9 +26,10 @@ namespace Microsoft.AspNetCore.Http
             this HttpContext context,
             PathString url)
             =>
-            string.IsNullOrWhiteSpace(url)
-            ? context.IsRequestingRootUrl()
-            : context.Request.Path == url;
+            url.HasValue
+
+            ? context.Request.Path == url
+            : context.IsRequestingRootUrl();
 
         public static bool IsRequestingRootUrl(
             this HttpContext context)

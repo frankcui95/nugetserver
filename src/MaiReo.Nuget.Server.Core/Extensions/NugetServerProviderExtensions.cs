@@ -1,6 +1,11 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
+using System.Linq;
 
 namespace MaiReo.Nuget.Server.Core
 {
@@ -12,15 +17,126 @@ namespace MaiReo.Nuget.Server.Core
         {
             return new JsonSerializer
             {
-                NullValueHandling = NullValueHandling.Ignore,
+                NullValueHandling
+                = NullValueHandling.Ignore,
                 Formatting =
 #if DEBUG
                 Formatting.Indented,
 #else
-                provider.MvcJsonOptions.SerializerSettings.Formatting,
+                provider
+                .MvcJsonOptions
+                .SerializerSettings.Formatting,
 #endif
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
+                ContractResolver
+                = new CamelCasePropertyNamesContractResolver()
             };
         }
+        public static PathString GetApiMajorVersionUrl(
+            this INugetServerProvider provider)
+        {
+            var majorVersion = new string(
+                provider
+                ?.NugetServerOptions
+                ?.ApiVersion
+                ?.TakeWhile(c => c != '-')
+                ?.TakeWhile(c => c != '.')
+                ?.ToArray()
+                ?? new char[0]);
+
+            if (string.IsNullOrWhiteSpace(majorVersion))
+                majorVersion = null;
+            else if (majorVersion.Any(c => !char.IsDigit(c)))
+                majorVersion = null;
+
+            if (string.IsNullOrWhiteSpace(majorVersion))
+            {
+                throw new InvalidOperationException(
+                    "Nuget server api version not specified.");
+            }
+            return "/v" + majorVersion;
+
+        }
+        public static PathString GetResourceValue(
+            this INugetServerProvider provider,
+            NugetServerResourceType resourceType)
+            =>
+            provider
+            ?.NugetServerOptions
+            ?.Resources
+            ?.ContainsKey(resourceType) != true
+            ? null
+            : provider
+            .NugetServerOptions
+            .Resources[resourceType];
+
+        public static string GetPackageRootFullPath(
+            this INugetServerProvider provider)
+        {
+            var baseDir = AppDomain
+                .CurrentDomain
+                .BaseDirectory;
+
+            if (string.IsNullOrWhiteSpace(
+                provider
+                ?.NugetServerOptions
+                ?.PackageDirectory))
+            {
+                return baseDir;
+            }
+
+            return Path.Combine(baseDir,
+                provider
+                ?.NugetServerOptions
+                .PackageDirectory);
+        }
+
+        public static IEnumerable<string> GetAllPackages(
+            this INugetServerProvider provider)
+            => Directory
+            .EnumerateFiles(
+                provider.GetPackageRootFullPath(),
+                "*.nupkg",
+                SearchOption.AllDirectories);
+
+        public static PathString GetResourceUrlPath(
+            this INugetServerProvider provider,
+            NugetServerResourceType resourceType)
+        {
+            var majorVersion = provider
+                .GetApiMajorVersionUrl();
+
+            var path = provider.GetResourceValue(
+                    resourceType);
+            if (!path.HasValue)
+            {
+                throw new InvalidOperationException(
+                    "Nuget server resource " +
+                    resourceType +
+                    " not specified.");
+            }
+            return majorVersion + path;
+        }
+
+        public static bool IsMatchVerbs(
+            this INugetServerProvider provider,
+            HttpContext context,
+            params Func<string, bool>[] verbs)
+            => verbs?.Any(
+                v => v(context.Request.Method)) == true;
+
+        public static bool IsMatchResource(
+            this INugetServerProvider provider,
+            NugetServerResourceType resourceType,
+            HttpContext context) 
+            => context
+                .IsRequestingUrl(provider
+                .GetResourceUrlPath(resourceType));
+
+        public static bool IsMatchPath(
+            this INugetServerProvider provider,
+            PathString path,
+            HttpContext context) 
+            => context
+                .IsRequestingUrl(path);
     }
 }

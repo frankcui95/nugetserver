@@ -1,5 +1,6 @@
 ﻿using MaiReo.Nuget.Server.Core;
 using MaiReo.Nuget.Server.Core;
+using MaiReo.Nuget.Server.PackageBaseAddress;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -26,12 +27,10 @@ namespace MaiReo.Nuget.Server.Middlewares
             HttpContext context,
             RequestDelegate next)
         {
-            if (context
-                .IsRequestingPackageBaseAddress(
-                _nugetServerProvider.NugetServerOptions))
+            if (_nugetServerProvider.IsMatch(context))
             {
                 await _nugetServerProvider
-                      .RespondPackageBaseAddressAsync(context);
+                      .RespondAsync(context);
                 return;
             }
 

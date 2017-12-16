@@ -4,20 +4,20 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    public static class ServiceCollectionExtensions
+    public static class
+    PackagePublishServiceCollectionExtensions
     {
         public static IServiceCollection
         AddNugetServerPackagePublish(
             this IServiceCollection services,
             string url = null)
         {
-            services
-            .AddNugetServerCore(
-                opt => opt
-                .Resources
-                .Add(NugetServerResourceTypes.PackagePublish,
+            services.AddNugetServerCore(
+                opt => opt.Resources
+                .Add(NugetServerResourceType.PackagePublish,
                     url ?? "/package"))
-            .TryAddTransient<NugetServerPackagePublishMiddleware>();
+            .TryAddTransient
+            <NugetServerPackagePublishMiddleware>();
 
             return services;
         }

@@ -1,13 +1,7 @@
 ﻿using MaiReo.Nuget.Server.Core;
-using MaiReo.Nuget.Server.Core;
+using MaiReo.Nuget.Server.SearchQueryService;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MaiReo.Nuget.Server.Middlewares
@@ -26,12 +20,10 @@ namespace MaiReo.Nuget.Server.Middlewares
             HttpContext context,
             RequestDelegate next)
         {
-            if (context
-                .IsRequestingSearchQueryService(
-                _nugetServerProvider.NugetServerOptions))
+            if (_nugetServerProvider.IsMatch(context))
             {
                 await _nugetServerProvider
-                      .RespondSearchQueryServiceAsync(context);
+                      .RespondAsync(context);
                 return;
             }
 

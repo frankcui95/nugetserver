@@ -4,10 +4,10 @@ namespace Microsoft.AspNetCore.Builder
 {
     public static class ApplicationBuilderExtensions
     {
-        public static IApplicationBuilder UseNugetServerPackagePublish(
+        public static IApplicationBuilder
+            UseNugetServerPackagePublish(
             this IApplicationBuilder app)
-            =>
-            app
-            .UseMiddleware<NugetServerPackagePublishMiddleware>();
+            => app.UseMiddleware
+            <NugetServerPackagePublishMiddleware>();
     }
 }

@@ -1,39 +1,35 @@
-﻿using MaiReo.Nuget.Server.Core.Extensions;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using System.ComponentModel;
-using System.Threading.Tasks;
+﻿using MaiReo.Nuget.Server.Core;
 using MaiReo.Nuget.Server.Models;
 using MaiReo.Nuget.Server.Serialization;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
-using System.Text;
+using System.Linq;
 using System.Net.Http;
-using Newtonsoft.Json.Serialization;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace MaiReo.Nuget.Server.Core
+namespace MaiReo.Nuget.Server.ServerIndex
 {
     [EditorBrowsable(EditorBrowsableState.Never)]
     public static class NugetServerProviderExtensions
     {
-        public static async Task RespondServerIndexAsync(
+        public static async Task RespondAsync(
             this INugetServerProvider provider,
             HttpContext context)
         {
             var serializer = provider
                 .CreateJsonSerializerForServiceIndex();
             var baseUrl = context.GetBaseUrl();
-            var versionPrefix = "/v" +
-                provider.NugetServerOptions
-                .GetApiMajorVersion();
+            var apiMajorVersionUrl = provider.GetApiMajorVersionUrl();
 
-            var serverIndex = new ServerIndex(
-                baseUrl + versionPrefix,
-                provider.NugetServerOptions)
+            var serverIndex = new ServerIndexModel(
+                provider.ParseResource(context))
             {
-                Version = provider
-                .NugetServerOptions
-                .ApiVersion,
+                Version = provider.NugetServerOptions.ApiVersion,
                 Context = ServerIndexContext.Default
             };
 
@@ -53,7 +49,7 @@ namespace MaiReo.Nuget.Server.Core
 
                 context.Response.ContentLength
                        = content.Headers.ContentLength;
-                context.Response.ContentType 
+                context.Response.ContentType
                     = content.Headers.ContentType.ToString();
 
                 if (HttpMethods.IsHead(context.Request.Method))
@@ -80,9 +76,62 @@ namespace MaiReo.Nuget.Server.Core
             this INugetServerProvider provider)
         {
             var serializer = provider.CreateJsonSerializer();
-            serializer.ContractResolver 
+            serializer.ContractResolver
                 = new ServerIndexContractResolver();
             return serializer;
+        }
+
+        public static IEnumerable<ServerIndexResourceModel>
+        ParseResource(this INugetServerProvider provider, HttpContext context)
+        {
+            var resources = provider
+                ?.NugetServerOptions
+                ?.Resources
+                ?.Select(r => r.Key);
+
+            if (resources == null)
+            {
+                yield break;
+            }
+
+            var baseUrl = context.GetBaseUrl();
+
+            foreach (var resource in resources)
+            {
+                yield return new ServerIndexResourceModel
+                {
+                    Type = resource.GetText(),
+                    Id = baseUrl + provider.GetResourceValue(resource)
+                };
+            }
+        }
+
+        public static PathString GetServiceIndexUrlPath(
+            this INugetServerProvider provider)
+        {
+            var majorVersion = provider.GetApiMajorVersionUrl();
+
+            var path = provider
+                ?.NugetServerOptions
+                ?.ServiceIndex
+                ?? throw new InvalidOperationException(
+                    "Nuget server index not specified.");
+
+            return $"{majorVersion}{path}";
+        }
+
+        public static bool IsMatch(
+            this INugetServerProvider provider,
+            HttpContext context)
+        {
+            if (!provider.IsMatchVerbs(context,
+                HttpMethods.IsHead,
+                HttpMethods.IsGet))
+            {
+                return false;
+            }
+
+            return provider.IsMatchPath(provider.GetServiceIndexUrlPath(), context);
         }
     }
 }

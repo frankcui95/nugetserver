@@ -22,7 +22,7 @@ namespace MaiReo.Nuget.Server.Core
             ApiVersion = DEFAULT_API_VERSION;
             ServiceIndex = DEFAULT_SERVICE_INDEX_V3;
             PackageDirectory = DEFAULT_Package_Directory;
-            Resources = new Dictionary<string,PathString>();
+            Resources = new Dictionary<NugetServerResourceType, PathString>();
         }
 
         /// <summary>
@@ -44,6 +44,6 @@ namespace MaiReo.Nuget.Server.Core
         /// <summary>
         /// For more infomation, please visit https://docs.microsoft.com/en-us/nuget/api/service-index .
         /// </summary>
-        public IDictionary<string, PathString> Resources { get; private set; }
+        public IDictionary<NugetServerResourceType, PathString> Resources { get; private set; }
     }
 }

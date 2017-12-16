@@ -4,22 +4,21 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    public static class ServiceCollectionExtensions
+    public static class
+    PackageBaseAddressServiceCollectionExtensions
     {
         public static IServiceCollection
         AddNugetServerPackageBaseAddress(
             this IServiceCollection services,
             string url = null)
         {
-            services
-            .AddNugetServerCore(
-                opt =>
-                opt
-                .Resources
-                .Add(
-                   NugetServerResourceTypes.PackageBaseAddress,
+            services.AddNugetServerCore(
+                opt => opt.Resources.Add(
+                   NugetServerResourceType
+                   .PackageBaseAddress,
                     url ?? "/flatcontainer"))
-            .TryAddTransient<NugetServerPackageBaseAddressMiddleware>();
+            .TryAddTransient
+            <NugetServerPackageBaseAddressMiddleware>();
 
             return services;
         }

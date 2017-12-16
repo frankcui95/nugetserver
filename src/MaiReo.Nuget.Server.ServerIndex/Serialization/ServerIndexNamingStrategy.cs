@@ -1,10 +1,7 @@
 ﻿using MaiReo.Nuget.Server.Models;
 using Newtonsoft.Json.Serialization;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
 
 namespace MaiReo.Nuget.Server.Serialization
 {
@@ -15,10 +12,10 @@ namespace MaiReo.Nuget.Server.Serialization
         {
             PropertyNameNeedPrefix = new[]
             {
-                nameof(ServerIndex.Context),
                 nameof(ServerIndexContext.Vocab),
-                nameof(ServerIndexResource.Id),
-                nameof(ServerIndexResource.Type),
+                nameof(ServerIndexModel.Context),
+                nameof(ServerIndexResourceModel.Id),
+                nameof(ServerIndexResourceModel.Type),
             };
         }
         public static string[] PropertyNameNeedPrefix { get; private set; }

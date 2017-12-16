@@ -4,17 +4,17 @@ using System.ComponentModel;
 namespace MaiReo.Nuget.Server.Models
 {
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public class ServerIndexResourceComparer : IEqualityComparer<ServerIndexResource>
+    public class ServerIndexResourceModelComparer : IEqualityComparer<ServerIndexResourceModel>
     {
-        static ServerIndexResourceComparer()
+        static ServerIndexResourceModelComparer()
             =>
-            Instance = new ServerIndexResourceComparer();
+            Instance = new ServerIndexResourceModelComparer();
 
-        public static ServerIndexResourceComparer Instance { get; private set; }
+        public static ServerIndexResourceModelComparer Instance { get; private set; }
 
         public bool Equals(
-            ServerIndexResource x,
-            ServerIndexResource y)
+            ServerIndexResourceModel x,
+            ServerIndexResourceModel y)
             =>
             object.ReferenceEquals(x, y)
             || string.Equals(x?.Type, y?.Type,
@@ -23,7 +23,7 @@ namespace MaiReo.Nuget.Server.Models
                 .CurrentCultureIgnoreCase);
 
         public int GetHashCode(
-            ServerIndexResource obj)
+            ServerIndexResourceModel obj)
             => obj
             ?.Type
             ?.ToLower()

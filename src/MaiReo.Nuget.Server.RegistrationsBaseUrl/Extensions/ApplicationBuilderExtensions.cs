@@ -4,10 +4,12 @@ namespace Microsoft.AspNetCore.Builder
 {
     public static class ApplicationBuilderExtensions
     {
-        public static IApplicationBuilder UseNugetServerRegistrationsBaseUrl(
+        public static IApplicationBuilder
+        UseNugetServerRegistrationsBaseUrl(
             this IApplicationBuilder app)
             =>
             app
-            .UseMiddleware<NugetServerRegistrationsBaseUrlMiddleware>();
+            .UseMiddleware
+            <RegistrationsBaseUrlMiddleware>();
     }
 }

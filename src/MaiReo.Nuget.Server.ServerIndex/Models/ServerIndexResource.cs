@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MaiReo.Nuget.Server.Models
 {
-    public class ServerIndexResource
+    public class ServerIndexResourceModel
     {
         public string Id { get; set; }
 
