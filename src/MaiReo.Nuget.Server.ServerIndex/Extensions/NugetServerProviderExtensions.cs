@@ -98,11 +98,12 @@ namespace MaiReo.Nuget.Server.ServerIndex
 
             foreach (var resource in resources)
             {
-                yield return new ServerIndexResourceModel
+                var model = new ServerIndexResourceModel
                 {
                     Type = resource.GetText(),
-                    Id = baseUrl + provider.GetResourceValue(resource)
-                };
+                    Id = baseUrl + provider.GetResourceUrlPath(resource)
+                }; ;
+                yield return model;
             }
         }
 
