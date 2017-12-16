@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>../MaiReo.Nuget.Server.pfx</AssemblyOriginatorKeyFile>
+    <Copyright>MaiReo</Copyright>
+    <Description>Nuget API v3.</Description>
+    <Authors>MaiReo</Authors>
+    <Company />
+    <PackageProjectUrl>https://github.com/MaiReo/nugetserver</PackageProjectUrl>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/MaiReo/nugetserver/master/LICENSE</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/MaiReo/nugetserver</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+  </PropertyGroup>
+
+</Project>
