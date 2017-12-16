@@ -4,9 +4,9 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>../MaiReo.Nuget.Server.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>../../MaiReo.Nuget.Server.pfx</AssemblyOriginatorKeyFile>
     <Copyright>MaiReo</Copyright>
-    <Description>Nuget gallery.</Description>
+    <Description>Nuget Gallery(No plan yet).</Description>
     <Authors>MaiReo</Authors>
     <Company />
     <PackageProjectUrl>https://github.com/MaiReo/nugetserver</PackageProjectUrl>

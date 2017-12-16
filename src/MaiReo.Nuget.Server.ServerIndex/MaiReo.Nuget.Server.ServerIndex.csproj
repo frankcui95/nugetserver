@@ -6,7 +6,7 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>../../MaiReo.Nuget.Server.pfx</AssemblyOriginatorKeyFile>
     <Copyright>MaiReo</Copyright>
-    <Description>Nuget API v3.</Description>
+    <Description>Nuget API Server Index v3.</Description>
     <Authors>MaiReo</Authors>
     <Company />
     <PackageProjectUrl>https://github.com/MaiReo/nugetserver</PackageProjectUrl>
@@ -18,10 +18,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="2.0.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="2.0.0" />
+    <ProjectReference Include="..\MaiReo.Nuget.Server.Core\MaiReo.Nuget.Server.Core.csproj" />
   </ItemGroup>
 
 </Project>
