@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MaiReo.Nuget.Server.Configurations;
+using MaiReo.Nuget.Server.Core;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 

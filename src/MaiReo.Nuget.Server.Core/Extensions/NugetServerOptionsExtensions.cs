@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace MaiReo.Nuget.Server.Configurations.Extensions
+namespace MaiReo.Nuget.Server.Core.Extensions
 {
     [EditorBrowsable(EditorBrowsableState.Never)]
     public static class NugetServerOptionsExtensions

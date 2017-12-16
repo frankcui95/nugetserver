@@ -1,4 +1,4 @@
-﻿using MaiReo.Nuget.Server.Configurations.Extensions;
+﻿using MaiReo.Nuget.Server.Core.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -20,12 +20,20 @@ namespace MaiReo.Nuget.Server.Core
             this INugetServerProvider provider,
             HttpContext context)
         {
-            var serializer = provider.CreateJsonSerializerForServiceIndex();
+            var serializer = provider
+                .CreateJsonSerializerForServiceIndex();
             var baseUrl = context.GetBaseUrl();
-            var versionPrefix = "/v" + provider.NugetServerOptions.GetApiMajorVersion();
-            var serverIndex = new ServerIndex(baseUrl + versionPrefix, provider.NugetServerOptions)
+            var versionPrefix = "/v" +
+                provider.NugetServerOptions
+                .GetApiMajorVersion();
+
+            var serverIndex = new ServerIndex(
+                baseUrl + versionPrefix,
+                provider.NugetServerOptions)
             {
-                Version = provider.NugetServerOptions.ApiVersion,
+                Version = provider
+                .NugetServerOptions
+                .ApiVersion,
                 Context = ServerIndexContext.Default
             };
 
@@ -37,23 +45,29 @@ namespace MaiReo.Nuget.Server.Core
 
             context.Response.StatusCode
                 = (int)System.Net.HttpStatusCode.OK;
-            using (var content = new StringContent(sb.ToString(),
+            using (var content = new StringContent(
+                sb.ToString(),
                 Encoding.UTF8,
                 "application/json"))
             {
-                if (HttpMethods
-                    .IsHead(context.Request.Method))
+
+                context.Response.ContentLength
+                       = content.Headers.ContentLength;
+                context.Response.ContentType 
+                    = content.Headers.ContentType.ToString();
+
+                if (HttpMethods.IsHead(context.Request.Method))
                 {
-                    context.Response.ContentLength
-                        = content.Headers.ContentLength;
+                    return;
                 }
-                else if (HttpMethods
-                    .IsGet(context.Request.Method))
+
+                if (HttpMethods.IsGet(context.Request.Method))
                 {
+
                     await Task.Run(
                         () =>
-                        content
-                        .CopyToAsync(context.Response.Body),
+                        content.CopyToAsync(
+                            context.Response.Body),
                             context.RequestAborted);
                 }
             }
@@ -61,11 +75,13 @@ namespace MaiReo.Nuget.Server.Core
 
         }
 
-        public static JsonSerializer CreateJsonSerializerForServiceIndex(
+        public static JsonSerializer
+        CreateJsonSerializerForServiceIndex(
             this INugetServerProvider provider)
         {
             var serializer = provider.CreateJsonSerializer();
-            serializer.ContractResolver = new ServerIndexContractResolver();
+            serializer.ContractResolver 
+                = new ServerIndexContractResolver();
             return serializer;
         }
     }

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using MaiReo.Nuget.Server.Configurations;
-using MaiReo.Nuget.Server.Configurations.Extensions;
+using MaiReo.Nuget.Server.Core;
+using MaiReo.Nuget.Server.Core.Extensions;
 
 namespace Microsoft.AspNetCore.Http
 {

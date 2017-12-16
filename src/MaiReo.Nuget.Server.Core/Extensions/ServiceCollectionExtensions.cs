@@ -1,5 +1,5 @@
-﻿using MaiReo.Nuget.Server.Configurations;
-using MaiReo.Nuget.Server.Configurations.Extensions;
+﻿using MaiReo.Nuget.Server.Core;
+using MaiReo.Nuget.Server.Core.Extensions;
 using MaiReo.Nuget.Server.Core;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;

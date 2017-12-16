@@ -1,4 +1,4 @@
-﻿using MaiReo.Nuget.Server.Configurations;
+﻿using MaiReo.Nuget.Server.Core;
 using MaiReo.Nuget.Server.Core;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

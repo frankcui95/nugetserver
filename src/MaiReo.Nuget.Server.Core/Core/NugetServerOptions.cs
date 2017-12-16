@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 
-namespace MaiReo.Nuget.Server.Configurations
+namespace MaiReo.Nuget.Server.Core
 {
     public class NugetServerOptions
     {
