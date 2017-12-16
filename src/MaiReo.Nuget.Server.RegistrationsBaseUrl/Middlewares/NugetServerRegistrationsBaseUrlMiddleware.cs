@@ -1,4 +1,5 @@
 ﻿using MaiReo.Nuget.Server.Configurations;
+using MaiReo.Nuget.Server.Core;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -9,7 +10,7 @@ using System.ComponentModel;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MaiReo.Nuget.Server.Core
+namespace MaiReo.Nuget.Server.Middlewares
 {
     [EditorBrowsable(EditorBrowsableState.Never)]
     public class NugetServerRegistrationsBaseUrlMiddleware : IMiddleware

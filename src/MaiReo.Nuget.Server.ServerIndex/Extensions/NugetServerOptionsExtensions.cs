@@ -26,7 +26,7 @@ namespace MaiReo.Nuget.Server.Configurations.Extensions
                 ?? throw new InvalidOperationException(
                     "Nuget server index not specified.");
                
-            return $"v{majorVersion}/{path}";
+            return $"/v{majorVersion}{path}";
         }
         
 

@@ -1,4 +1,6 @@
 ﻿using MaiReo.Nuget.Server;
+using MaiReo.Nuget.Server.Middlewares;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -14,7 +16,8 @@ namespace Microsoft.Extensions.DependencyInjection
                 opt => opt
                 .Resources
                 .Add(NugetServerResourceTypes.SearchQueryService,
-                url ?? "query"));
+                url ?? "/query"))
+            .TryAddTransient<NugetServerSearchQueryServiceMiddleware>(); 
 
             return services;
         }

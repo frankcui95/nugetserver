@@ -1,5 +1,4 @@
-﻿using System;
-using MaiReo.Nuget.Server.Core;
+﻿using MaiReo.Nuget.Server.Middlewares;
 
 namespace Microsoft.AspNetCore.Builder
 {

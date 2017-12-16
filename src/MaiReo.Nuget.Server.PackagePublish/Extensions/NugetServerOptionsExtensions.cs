@@ -32,7 +32,7 @@ namespace MaiReo.Nuget.Server.Configurations.Extensions
                     NugetServerResourceTypes.PackagePublish +
                     " not specified.");
             }
-            return $"v{majorVersion}/{path}";
+            return $"/v{majorVersion}{path}";
         }
 
     }

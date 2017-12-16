@@ -13,7 +13,12 @@ namespace MaiReo.Nuget.Server.Core
             return new JsonSerializer
             {
                 NullValueHandling = NullValueHandling.Ignore,
-                Formatting = provider.MvcJsonOptions.SerializerSettings.Formatting,
+                Formatting =
+#if DEBUG
+                Formatting.Indented,
+#else
+                provider.MvcJsonOptions.SerializerSettings.Formatting,
+#endif
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
         }

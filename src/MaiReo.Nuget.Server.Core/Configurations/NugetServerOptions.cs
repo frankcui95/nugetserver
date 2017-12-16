@@ -11,7 +11,7 @@ namespace MaiReo.Nuget.Server.Configurations
         public const string DEFAULT_API_VERSION = "3.0.0-beta.1";
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public const string DEFAULT_SERVICE_INDEX_V3 = "index.json";
+        public const string DEFAULT_SERVICE_INDEX_V3 = "/index.json";
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public const string DEFAULT_Package_Directory = "packages";
@@ -33,7 +33,7 @@ namespace MaiReo.Nuget.Server.Configurations
         /// <summary>
         /// For more infomation, please visit https://docs.microsoft.com/en-us/nuget/api/service-index .
         /// </summary>
-        public string ServiceIndex { get; set; }
+        public PathString ServiceIndex { get; set; }
         /// <summary>
         /// Gets or set nuget package (.nupkg) directory root path.
         /// Default is "packages".

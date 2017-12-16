@@ -15,8 +15,10 @@ namespace MaiReo.Nuget.Server.Serialization
         {
             PropertyNameNeedPrefix = new[]
             {
+                nameof(ServerIndex.Context),
+                nameof(ServerIndexContext.Vocab),
                 nameof(ServerIndexResource.Id),
-                nameof(ServerIndexResource.Type)
+                nameof(ServerIndexResource.Type),
             };
         }
         public static string[] PropertyNameNeedPrefix { get; private set; }

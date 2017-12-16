@@ -23,6 +23,8 @@ namespace MaiReo.Nuget.Server.Models
 
         public IEnumerable<ServerIndexResource> Resources { get; private set; }
 
+        public ServerIndexContext Context { get; set; }
+
         private IEnumerable<ServerIndexResource> ParseResource(IEnumerable<KeyValuePair<string, PathString>> resources)
         {
             if (resources == null)
@@ -38,5 +40,6 @@ namespace MaiReo.Nuget.Server.Models
                 };
             }
         }
+        
     }
 }

@@ -28,11 +28,11 @@ namespace MaiReo.Nuget.Server.Configurations.Extensions
             if (!path.HasValue)
             {
                 throw new InvalidOperationException(
-                    "Nuget server" +
+                    "Nuget server " +
                     NugetServerResourceTypes.SearchQueryService +
                     " not specified.");
             }
-            return $"v{majorVersion}/{path}";
+            return $"/v{majorVersion}{path}";
         }
 
 

@@ -1,4 +1,6 @@
 ﻿using MaiReo.Nuget.Server;
+using MaiReo.Nuget.Server.Middlewares;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -7,15 +9,19 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection
         AddNugetServerPackageBaseAddress(
             this IServiceCollection services,
-            string url = null) 
-            => 
+            string url = null)
+        {
             services
             .AddNugetServerCore(
-                opt => 
+                opt =>
                 opt
                 .Resources
                 .Add(
                    NugetServerResourceTypes.PackageBaseAddress,
-                    url ?? "flatcontainer"));
+                    url ?? "/flatcontainer"))
+            .TryAddTransient<NugetServerPackageBaseAddressMiddleware>();
+
+            return services;
+        }
     }
 }

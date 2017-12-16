@@ -25,15 +25,15 @@ namespace MaiReo.Nuget.Server.Configurations.Extensions
             var path =
                 options
                 .GetResourceValue(
-                    NugetServerResourceTypes.RegistrationsBaseUrl);
+                    NugetServerResourceTypes.RegistrationsBaseUrl_3_4_0);
             if (!path.HasValue)
             {
                 throw new InvalidOperationException(
-                    "Nuget server" +
-                    NugetServerResourceTypes.RegistrationsBaseUrl +
+                    "Nuget server " +
+                    NugetServerResourceTypes.RegistrationsBaseUrl_3_4_0 +
                     " not specified.");
             }
-            return $"v{majorVersion}/{path}";
+            return $"/v{majorVersion}{path}";
         }
 
     }

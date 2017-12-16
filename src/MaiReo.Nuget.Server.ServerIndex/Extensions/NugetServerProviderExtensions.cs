@@ -21,9 +21,12 @@ namespace MaiReo.Nuget.Server.Core
             HttpContext context)
         {
             var serializer = provider.CreateJsonSerializerForServiceIndex();
-            var serverIndex = new ServerIndex(context.GetBaseUrl(), provider.NugetServerOptions)
+            var baseUrl = context.GetBaseUrl();
+            var versionPrefix = "/v" + provider.NugetServerOptions.GetApiMajorVersion();
+            var serverIndex = new ServerIndex(baseUrl + versionPrefix, provider.NugetServerOptions)
             {
-                Version = provider.NugetServerOptions.ApiVersion
+                Version = provider.NugetServerOptions.ApiVersion,
+                Context = ServerIndexContext.Default
             };
 
             var sb = new StringBuilder();
