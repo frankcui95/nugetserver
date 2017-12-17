@@ -1,10 +1,11 @@
 ﻿using MaiReo.Nuget.Server;
+using MaiReo.Nuget.Server.Core;
 using MaiReo.Nuget.Server.Middlewares;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    public static class 
+    public static class
     SearchQueryServiceCollectionExtensions
     {
         public static IServiceCollection
@@ -16,9 +17,13 @@ namespace Microsoft.Extensions.DependencyInjection
                 opt => opt.Resources
                     .Add(NugetServerResourceType
                          .SearchQueryService,
-                         url ?? "/query"))
-            .TryAddTransient
-            <NugetServerSearchQueryServiceMiddleware>(); 
+                         url ?? "/query"));
+
+            services.TryAddTransient
+            <INuspecProvider, ZipFileNuspecProvider>();
+
+            services.TryAddTransient
+            <NugetServerSearchQueryServiceMiddleware>();
 
             return services;
         }

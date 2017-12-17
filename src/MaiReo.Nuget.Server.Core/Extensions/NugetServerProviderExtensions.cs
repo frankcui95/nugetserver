@@ -2,9 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
 
 namespace MaiReo.Nuget.Server.Core
@@ -59,37 +57,7 @@ namespace MaiReo.Nuget.Server.Core
             .NugetServerOptions
             .Resources[resourceType];
 
-        public static string GetPackageRootFullPath(
-            this INugetServerProvider provider)
-        {
-            var currentPath = Path.GetFullPath(".");
-
-            var baseDir = AppDomain
-                .CurrentDomain
-                .BaseDirectory;
-
-            if (string.IsNullOrWhiteSpace(
-                provider
-                ?.NugetServerOptions
-                ?.PackageDirectory))
-            {
-                return currentPath ?? baseDir;
-            }
-
-            return Path.Combine(currentPath ?? baseDir,
-                provider
-                .NugetServerOptions
-                .PackageDirectory);
-        }
-
-        public static IEnumerable<string> GetAllPackagePaths(
-            this INugetServerProvider provider)
-            => Directory
-            .EnumerateFiles(
-                provider.GetPackageRootFullPath(),
-                "*.nupkg",
-                SearchOption.AllDirectories);
-
+       
         public static PathString GetResourceUrlPath(
             this INugetServerProvider provider,
             NugetServerResourceType resourceType)

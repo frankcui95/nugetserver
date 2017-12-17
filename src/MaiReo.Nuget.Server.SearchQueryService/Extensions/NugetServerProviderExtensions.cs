@@ -29,40 +29,34 @@ namespace MaiReo.Nuget.Server.SearchQueryService
             var searchInputModel = context.FromQueryString<SearchInputModel>();
             var searchOutputModel = new SearchOutputModel();
 
-            var path_metadatas =
-                provider
-                .GetAllPackagePaths()
-                .Select(p => new
+            var metadata_versions =
+                provider.NuspecProvider
+                .GetAll()
+                .Where(nuspec => nuspec.Metadata != null)
+                .Select(nuspec => new
                 {
-                    FilePath = p,
-                    Nuspec = Zip.ReadNuspec(p)
+                    nuspec.Metadata,
+                    Version = (NuGetVersionString)nuspec.Metadata.Version
                 })
-                .Where(pn => pn.Nuspec?.Metadata != null)
-                .Select(pn => new
-                {
-                    pn.FilePath,
-                    pn.Nuspec.Metadata,
-                    Version = (NuGetVersionString)pn.Nuspec.Metadata.Version
-                })
-                .Where(pn =>
+                .Where(mv =>
                     searchInputModel.SemVerLevel?.IsSemVer2 == true
                     ? true
-                    : !pn.Version.IsSemVer2)
-                .Where(pn =>
+                    : !mv.Version.IsSemVer2)
+                .Where(mv =>
                     searchInputModel.PreRelease
                     ? true
-                    : !pn.Version.IsPrerelease)
-                .OrderBy(pm => pm.Metadata.Id)
-                .GroupBy(pm => pm.Metadata.Id)
-                .Where(x => string.IsNullOrWhiteSpace(searchInputModel.Q)
-                    || x.Key.ToLowerInvariant().Contains(searchInputModel.Q.ToLowerInvariant()))
+                    : !mv.Version.IsPrerelease)
+                .OrderBy(mv => mv.Metadata.Id)
+                .GroupBy(mv => mv.Metadata.Id)
+                .Where(mv => string.IsNullOrWhiteSpace(searchInputModel.Q)
+                    || mv.Key.ToLowerInvariant().Contains(searchInputModel.Q.ToLowerInvariant()))
                 .ToList();
-            var takes = path_metadatas
+            var takes = metadata_versions
                 .Skip(searchInputModel.Skip)
                 .Take(searchInputModel.Take)
                 .ToList();
 
-            searchOutputModel.TotalHits = path_metadatas.Count;
+            searchOutputModel.TotalHits = metadata_versions.Count;
 
             foreach (var path_metadata in takes)
             {

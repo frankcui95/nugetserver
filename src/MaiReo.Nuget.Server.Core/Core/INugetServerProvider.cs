@@ -13,5 +13,7 @@ namespace MaiReo.Nuget.Server.Core
         NugetServerOptions NugetServerOptions { get; }
 
         MvcJsonOptions MvcJsonOptions { get; }
+
+        INuspecProvider NuspecProvider { get; }
     }
 }
