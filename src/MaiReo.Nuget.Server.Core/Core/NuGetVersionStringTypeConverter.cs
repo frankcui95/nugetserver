@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NuGet.Versioning;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,22 +9,22 @@ using System.Text;
 
 namespace MaiReo.Nuget.Server.Core
 {
-    public class VersionStringTypeConverter : TypeConverter
+    public class NuGetVersionStringTypeConverter : TypeConverter
     {
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
         {
             return sourceType.In((x, y) => x == y,
                 typeof(string),
-                typeof(SemVer.Version),
-                typeof(VersionString));
+                typeof(NuGetVersion),
+                typeof(NuGetVersionString));
         }
 
         public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
         {
             return destinationType.In((x, y) => x == y,
                 typeof(string),
-                typeof(SemVer.Version),
-                typeof(VersionString),
+                typeof(NuGetVersion),
+                typeof(NuGetVersionString),
                 typeof(object));
         }
 
@@ -32,27 +33,27 @@ namespace MaiReo.Nuget.Server.Core
             var major = propertyValues.FirstOrDefault<int>("major");
             var minor = propertyValues.FirstOrDefault<int>("minor");
             var patch = propertyValues.FirstOrDefault<int>("patch");
-            var preRelease = propertyValues.FirstOrDefault<string>("prerelease");
-            var build = propertyValues.FirstOrDefault<string>("build");
-
-            return new VersionString(major, minor, patch, preRelease, build);
+            var revision = propertyValues.FirstOrDefault<int>("revision");
+            var releaseLabel = propertyValues.FirstOrDefault<string>("releaselabel");
+            var metadata = propertyValues.FirstOrDefault<string>("metadata");
+            return new NuGetVersionString(major, minor, patch, revision, releaseLabel, metadata);
         }
 
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
-            if (value is VersionString vs)
+            if (value is NuGetVersionString vs)
             {
                 return vs;
             }
-            if (value is SemVer.Version sv)
+            if (value is NuGetVersion nv)
             {
-                return sv == null
-                    ? default(VersionString)
-                    : new VersionString(sv.ToString());
+                return nv == null
+                    ? default(NuGetVersionString)
+                    : new NuGetVersionString(nv);
             }
             if (value is string s)
             {
-                return (VersionString)s;
+                return (NuGetVersionString)s;
             }
             throw new InvalidCastException();
         }
@@ -61,15 +62,19 @@ namespace MaiReo.Nuget.Server.Core
         {
             if (destinationType == typeof(string))
             {
-                return ((VersionString)value).ToString();
+                return ((NuGetVersionString)value).ToString();
             }
-            if (destinationType == typeof(VersionString))
+            if (destinationType == typeof(NuGetVersionString))
             {
-                return (VersionString)value;
+                return (NuGetVersionString)value;
             }
-            if (destinationType == typeof(SemVer.Version))
+            if (destinationType == typeof(NuGetVersion))
             {
-                return (SemVer.Version)(VersionString)value;
+                return (NuGetVersion)(NuGetVersionString)value;
+            }
+            if (destinationType == typeof(SemanticVersion))
+            {
+                return (SemanticVersion)(NuGetVersionString)value;
             }
             if (destinationType == typeof(object))
             {
@@ -80,11 +85,11 @@ namespace MaiReo.Nuget.Server.Core
 
         public override bool IsValid(ITypeDescriptorContext context, object value)
         {
-            if (value is VersionString)
+            if (value is NuGetVersionString)
             {
                 return true;
             }
-            if (value is SemVer.Version)
+            if (value is NuGetVersion)
             {
                 return true;
             }
@@ -92,7 +97,7 @@ namespace MaiReo.Nuget.Server.Core
             {
                 try
                 {
-                    new SemVer.Version(s);
+                    new NuGetVersionString(s);
                     return true;
                 }
                 catch

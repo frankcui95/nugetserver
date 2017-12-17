@@ -38,20 +38,6 @@ namespace MaiReo.Nuget.Server.Core
                 ?.NugetServerOptions
                 ?.ApiVersion?.Major;
 
-            //var majorVersion = new string(
-            //    provider
-            //    ?.NugetServerOptions
-            //    ?.ApiVersion
-            //    ?.TakeWhile(c => c != '-')
-            //    ?.TakeWhile(c => c != '.')
-            //    ?.ToArray()
-            //    ?? new char[0]);
-
-            //if (string.IsNullOrWhiteSpace(majorVersion))
-            //    majorVersion = null;
-            //else if (majorVersion.Any(c => !char.IsDigit(c)))
-            //    majorVersion = null;
-
             if (!majorVersion.HasValue)
             {
                 throw new InvalidOperationException(

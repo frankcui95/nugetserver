@@ -26,6 +26,6 @@ namespace MaiReo.Nuget.Server.SearchQueryService.Models
         /// <summary>
         /// A SemVer 1.0.0 version string
         /// </summary>
-        public VersionString SemVerLevel { get; set; }
+        public NuGetVersionString SemVerLevel { get; set; }
     }
 }
