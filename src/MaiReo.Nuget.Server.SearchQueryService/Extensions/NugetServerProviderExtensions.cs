@@ -81,7 +81,7 @@ namespace MaiReo.Nuget.Server.SearchQueryService
                         StringSplitOptions.RemoveEmptyEntries)
                         ?.ToList() ?? new List<string>(0),
                     ProjectUrl = latest.ProjectUrl,
-                    IconUrl = latest.IconUrl
+                    IconUrl = latest.IconUrl,
                     Registration = $"{registrationsBaseUrl}/{packageIdLowerInvariant}/index.json",
                     Summary = latest.ReleaseNotes,
                     Tags = latest.Tags?.Split(
