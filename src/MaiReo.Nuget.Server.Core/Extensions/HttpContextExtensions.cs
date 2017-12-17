@@ -3,11 +3,24 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using MaiReo.Nuget.Server.Core;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.Reflection;
+using System.Linq.Expressions;
+using System.Linq;
+using System.ComponentModel;
+using System.Collections.Concurrent;
+using Microsoft.Extensions.Primitives;
+using System.Collections;
 
 namespace Microsoft.AspNetCore.Http
 {
     public static class HttpContextExtensions
     {
+        public static T FromQueryString<T>(
+            this HttpContext context) 
+            where T : class, new() 
+            =>
+            context.Request.Query.As<T>();
 
         /// <summary>
         /// How to get the correct base url

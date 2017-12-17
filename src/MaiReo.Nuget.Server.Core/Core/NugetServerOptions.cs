@@ -28,7 +28,7 @@ namespace MaiReo.Nuget.Server.Core
         /// <summary>
         /// Gets or set nuget server api version. Only supports 3.0.0-beta.1 currently.
         /// </summary>
-        public string ApiVersion { get; set; }
+        public VersionString ApiVersion { get; set; }
 
         /// <summary>
         /// For more infomation, please visit https://docs.microsoft.com/en-us/nuget/api/service-index .

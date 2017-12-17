@@ -118,7 +118,7 @@ namespace MaiReo.Nuget.Server.ServerIndex
                 ?? throw new InvalidOperationException(
                     "Nuget server index not specified.");
 
-            return $"{majorVersion}{path}";
+            return majorVersion + path;
         }
 
         public static bool IsMatch(
@@ -131,7 +131,7 @@ namespace MaiReo.Nuget.Server.ServerIndex
             {
                 return false;
             }
-
+            
             return provider.IsMatchPath(provider.GetServiceIndexUrlPath(), context);
         }
     }

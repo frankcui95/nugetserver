@@ -15,8 +15,9 @@ namespace MaiReo.Nuget.Server.SearchQueryService
         {
             var serializer = provider.CreateJsonSerializer();
             var baseUrl = context.GetBaseUrl();
-            PathString majorVersionUrl
+            var majorVersionUrl
                 = provider.GetApiMajorVersionUrl();
+            var searchModel = context.FromQueryString<Models.SearchModel>();
         }
 
         public static bool IsMatch(

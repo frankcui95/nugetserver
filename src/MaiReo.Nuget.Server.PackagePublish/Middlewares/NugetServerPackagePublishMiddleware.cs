@@ -1,14 +1,7 @@
 ﻿using MaiReo.Nuget.Server.Core;
-using MaiReo.Nuget.Server.Core;
 using MaiReo.Nuget.Server.PackagePublish;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MaiReo.Nuget.Server.Middlewares

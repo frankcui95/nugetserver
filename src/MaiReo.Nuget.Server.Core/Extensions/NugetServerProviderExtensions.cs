@@ -34,21 +34,25 @@ namespace MaiReo.Nuget.Server.Core
         public static PathString GetApiMajorVersionUrl(
             this INugetServerProvider provider)
         {
-            var majorVersion = new string(
-                provider
+            var majorVersion = provider
                 ?.NugetServerOptions
-                ?.ApiVersion
-                ?.TakeWhile(c => c != '-')
-                ?.TakeWhile(c => c != '.')
-                ?.ToArray()
-                ?? new char[0]);
+                ?.ApiVersion?.Major;
 
-            if (string.IsNullOrWhiteSpace(majorVersion))
-                majorVersion = null;
-            else if (majorVersion.Any(c => !char.IsDigit(c)))
-                majorVersion = null;
+            //var majorVersion = new string(
+            //    provider
+            //    ?.NugetServerOptions
+            //    ?.ApiVersion
+            //    ?.TakeWhile(c => c != '-')
+            //    ?.TakeWhile(c => c != '.')
+            //    ?.ToArray()
+            //    ?? new char[0]);
 
-            if (string.IsNullOrWhiteSpace(majorVersion))
+            //if (string.IsNullOrWhiteSpace(majorVersion))
+            //    majorVersion = null;
+            //else if (majorVersion.Any(c => !char.IsDigit(c)))
+            //    majorVersion = null;
+
+            if (!majorVersion.HasValue)
             {
                 throw new InvalidOperationException(
                     "Nuget server api version not specified.");
@@ -122,12 +126,12 @@ namespace MaiReo.Nuget.Server.Core
             HttpContext context,
             params Func<string, bool>[] verbs)
             => verbs?.Any(
-                v => v(context.Request.Method)) == true;
+                v => v?.Invoke(context.Request.Method) == true) == true;
 
         public static bool IsMatchResource(
             this INugetServerProvider provider,
             NugetServerResourceType resourceType,
-            HttpContext context) 
+            HttpContext context)
             => context
                 .IsRequestingUrl(provider
                 .GetResourceUrlPath(resourceType));
@@ -135,7 +139,7 @@ namespace MaiReo.Nuget.Server.Core
         public static bool IsMatchPath(
             this INugetServerProvider provider,
             PathString path,
-            HttpContext context) 
+            HttpContext context)
             => context
                 .IsRequestingUrl(path);
     }
