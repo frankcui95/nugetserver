@@ -23,6 +23,9 @@
     <RepositoryUrl>https://github.com/MaiReo/nugetserver</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageReleaseNotes>Nuget server that contains API and gallery, but there is no plan for gallery currently.</PackageReleaseNotes>
+    <PackageTags>nuget,nuget-server</PackageTags>
+    <PackageIconUrl>https://raw.githubusercontent.com/MaiReo/nugetserver/master/icon.ico</PackageIconUrl>
   </PropertyGroup>
 
 </Project>

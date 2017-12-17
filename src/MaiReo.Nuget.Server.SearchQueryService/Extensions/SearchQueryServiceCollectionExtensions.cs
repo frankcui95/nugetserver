@@ -14,10 +14,21 @@ namespace Microsoft.Extensions.DependencyInjection
             string url = null)
         {
             services.AddNugetServerCore(
-                opt => opt.Resources
-                    .Add(NugetServerResourceType
-                         .SearchQueryService,
-                         url ?? "/query"));
+                opt => 
+                {
+                    opt.Resources.Add(
+                        NugetServerResourceType
+                        .SearchQueryService,
+                         url ?? "/query");
+                    opt.Resources.Add(
+                        NugetServerResourceType
+                        .SearchQueryService_3_0_0_beta,
+                         url ?? "/query");
+                    opt.Resources.Add(
+                        NugetServerResourceType
+                        .SearchQueryService_3_0_0_rc,
+                         url ?? "/query");
+                });
 
             services.TryAddTransient
             <INuspecProvider, ZipFileNuspecProvider>();

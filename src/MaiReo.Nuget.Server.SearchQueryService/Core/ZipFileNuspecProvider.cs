@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using MaiReo.Nuget.Server.Models;
+﻿using MaiReo.Nuget.Server.Models;
 using MaiReo.Nuget.Server.Tools;
 using Microsoft.Extensions.Options;
+using System.Collections.Generic;
 
 namespace MaiReo.Nuget.Server.Core
 {

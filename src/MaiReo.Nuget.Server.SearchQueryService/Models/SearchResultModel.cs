@@ -42,9 +42,9 @@ namespace MaiReo.Nuget.Server.Models
 
         public List<string> Authors { get; set; }
 
-        string IconUrl { get; set; }
+        public string IconUrl { get; set; }
 
-        string LicenseUrl { get; set; }
+        public string LicenseUrl { get; set; }
 
         public List<string> Owners { get; set; }
 
@@ -56,7 +56,7 @@ namespace MaiReo.Nuget.Server.Models
 
         public string Summary { get; set; }
 
-        List<string> Tags { get; set; }
+        public List<string> Tags { get; set; }
 
         public string Title { get; set; }
         /// <summary>

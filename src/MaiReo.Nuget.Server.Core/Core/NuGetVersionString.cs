@@ -40,6 +40,8 @@ namespace MaiReo.Nuget.Server.Core
         {
         }
 
+
+
         public NuGetVersionString(int major, int minor, int patch, int revision) : base(major, minor, patch, revision)
         {
         }
@@ -56,21 +58,14 @@ namespace MaiReo.Nuget.Server.Core
         {
         }
 
-        public static implicit operator string(NuGetVersionString version)
-            => version?.ToString();
+        public static new NuGetVersionString Parse(string version)
+        {
+            return new NuGetVersionString(NuGetVersion.Parse(version));
+        }
 
         public static implicit operator NuGetVersionString(string version)
         {
-            if (string.IsNullOrWhiteSpace(version))
-                return Default;
-            try
-            {
-                return new NuGetVersionString(version);
-            }
-            catch
-            {
-            }
-            return Default;
+            return Parse(version);
         }
 
         public static bool operator ==(NuGetVersionString left, object right)

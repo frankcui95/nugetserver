@@ -21,10 +21,9 @@ namespace MaiReo.Nuget.Server.SearchQueryService
             this INugetServerProvider provider,
             HttpContext context)
         {
-
             var registrationsBaseUrl = context.GetBaseUrl() +
                 provider.GetResourceUrlPath(
-                    NugetServerResourceType.RegistrationsBaseUrl_3_4_0);
+                    NugetServerResourceType.RegistrationsBaseUrl);
 
             var searchInputModel = context.FromQueryString<SearchInputModel>();
             var searchOutputModel = new SearchOutputModel();
@@ -39,7 +38,7 @@ namespace MaiReo.Nuget.Server.SearchQueryService
                     Version = (NuGetVersionString)nuspec.Metadata.Version
                 })
                 .Where(mv =>
-                    searchInputModel.SemVerLevel?.IsSemVer2 == true
+                    searchInputModel.SemVerLevel?.Major != 1
                     ? true
                     : !mv.Version.IsSemVer2)
                 .Where(mv =>
@@ -82,9 +81,16 @@ namespace MaiReo.Nuget.Server.SearchQueryService
                         StringSplitOptions.RemoveEmptyEntries)
                         ?.ToList() ?? new List<string>(0),
                     ProjectUrl = latest.ProjectUrl,
+                    IconUrl = latest.IconUrl
                     Registration = $"{registrationsBaseUrl}/{packageIdLowerInvariant}/index.json",
+                    Summary = latest.ReleaseNotes,
+                    Tags = latest.Tags?.Split(
+                        new[] { ',' },
+                        StringSplitOptions.RemoveEmptyEntries)
+                        ?.ToList() ?? new List<string>(0),
                     Title = latest.Id,
                     Version = latest.Version,
+                    LicenseUrl = latest.LicenseUrl,
                     Versions = metadatas.Select(m => new SearchResultPackageVersionModel
                     {
                         Id = $"{registrationsBaseUrl}/{packageIdLowerInvariant}/{m.Version}.json",
@@ -92,42 +98,7 @@ namespace MaiReo.Nuget.Server.SearchQueryService
                     }).ToList(),
                 });
             }
-            var serializer = provider.CreateJsonSerializer();
-            var sb = new StringBuilder();
-            using (var sw = new StringWriter(sb))
-            {
-                serializer.Serialize(sw, searchOutputModel);
-            }
-
-            context.Response.StatusCode
-                = (int)System.Net.HttpStatusCode.OK;
-            using (var content = new StringContent(
-                sb.ToString(),
-                Encoding.UTF8,
-                "application/json"))
-            {
-
-                context.Response.ContentLength
-                       = content.Headers.ContentLength;
-                context.Response.ContentType
-                    = content.Headers.ContentType.ToString();
-
-                if (HttpMethods.IsHead(context.Request.Method))
-                {
-                    return;
-                }
-
-                if (HttpMethods.IsGet(context.Request.Method))
-                {
-
-                    await Task.Run(
-                        () =>
-                        content.CopyToAsync(
-                            context.Response.Body),
-                            context.RequestAborted);
-                }
-
-            }
+            await provider.WriteJsonResponseAsync(context, searchOutputModel);
         }
 
         public static bool IsMatch(
@@ -141,9 +112,12 @@ namespace MaiReo.Nuget.Server.SearchQueryService
                 return false;
             }
 
-            return provider.IsMatchResource(
+            return provider.IsMatchResources(
+                context,
                 NugetServerResourceType.SearchQueryService,
-                context);
+                NugetServerResourceType.SearchQueryService_3_0_0_beta,
+                NugetServerResourceType.SearchQueryService_3_0_0_rc
+                );
         }
 
     }

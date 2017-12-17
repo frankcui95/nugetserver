@@ -30,8 +30,17 @@ namespace MaiReo.Nuget.Server.Models
         [XmlElement("projectUrl")]
         public string ProjectUrl { get; set; }
 
+        [XmlElement("iconUrl")]
+        public string IconUrl { get; set; }
+
         [XmlElement("description")]
         public string Description { get; set; }
+
+        [XmlElement("releaseNotes")]
+        public string ReleaseNotes { get; set; }
+
+        [XmlElement("tags")]
+        public string Tags { get; set; }
 
         [XmlElement("copyright")]
         public string Copyright { get; set; }

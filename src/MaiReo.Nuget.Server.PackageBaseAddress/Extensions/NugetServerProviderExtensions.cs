@@ -28,8 +28,9 @@ namespace MaiReo.Nuget.Server.PackageBaseAddress
             }
 
             return provider.IsMatchResource(
-                NugetServerResourceType.PackageBaseAddress,
-                context);
+                context,
+                NugetServerResourceType.PackageBaseAddress
+                );
         }
     }
 }

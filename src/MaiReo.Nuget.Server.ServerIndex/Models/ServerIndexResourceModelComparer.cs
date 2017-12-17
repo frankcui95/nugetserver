@@ -26,7 +26,7 @@ namespace MaiReo.Nuget.Server.Models
             ServerIndexResourceModel obj)
             => obj
             ?.Type
-            ?.ToLower()
+            ?.ToLowerInvariant()
             ?.GetHashCode()
             ?? 0;
     }

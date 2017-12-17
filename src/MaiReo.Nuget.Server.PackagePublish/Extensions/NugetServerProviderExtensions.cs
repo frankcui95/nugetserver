@@ -27,8 +27,9 @@ namespace MaiReo.Nuget.Server.PackagePublish
             }
             
             return provider.IsMatchResource(
-                NugetServerResourceType.PackagePublish,
-                context);
+                context,
+                NugetServerResourceType.PackagePublish
+                );
         }
         
     }

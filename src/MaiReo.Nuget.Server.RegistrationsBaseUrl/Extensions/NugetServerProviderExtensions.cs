@@ -26,9 +26,14 @@ namespace MaiReo.Nuget.Server.RegistrationsBaseUrl
             {
                 return false;
             }
-            return provider.IsMatchResource(
+            return provider.IsMatchResources(
+                context,
+                NugetServerResourceType.RegistrationsBaseUrl,
+                NugetServerResourceType.RegistrationsBaseUrl_3_0_0_beta,
+                NugetServerResourceType.RegistrationsBaseUrl_3_0_0_rc,
                 NugetServerResourceType.RegistrationsBaseUrl_3_4_0,
-                context);
+                NugetServerResourceType.RegistrationsBaseUrl_3_6_0
+                );
         }
     }
 }

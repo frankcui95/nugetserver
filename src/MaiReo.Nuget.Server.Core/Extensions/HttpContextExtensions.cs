@@ -17,8 +17,8 @@ namespace Microsoft.AspNetCore.Http
     public static class HttpContextExtensions
     {
         public static T FromQueryString<T>(
-            this HttpContext context) 
-            where T : class, new() 
+            this HttpContext context)
+            where T : class, new()
             =>
             context.Request.Query.As<T>();
 
@@ -35,13 +35,21 @@ namespace Microsoft.AspNetCore.Http
             "://" +
             context.Request.Host;
 
+        public static bool IsRequestingUrls(
+            this HttpContext context,
+            IEnumerable<PathString> urls)
+            =>
+            urls?.Any() == true
+            ? context.Request.Path.In(urls, (x, y) => x.StartsWithSegments(y))
+            : context.IsRequestingRootUrl();
+
         public static bool IsRequestingUrl(
             this HttpContext context,
             PathString url)
             =>
             url.HasValue
 
-            ? context.Request.Path == url
+            ? context.Request.Path.StartsWithSegments(url)
             : context.IsRequestingRootUrl();
 
         public static bool IsRequestingRootUrl(
