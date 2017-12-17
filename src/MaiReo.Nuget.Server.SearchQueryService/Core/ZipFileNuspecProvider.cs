@@ -17,7 +17,7 @@ namespace MaiReo.Nuget.Server.Core
 
         public NugetServerOptions NugetServerOptions { get; private set; }
 
-        public IEnumerable<Nuspec> GetAll()
+        public virtual IEnumerable<Nuspec> GetAll()
         {
             foreach (var filePath in this.GetAllPackagePaths())
             {
