@@ -62,6 +62,8 @@ namespace MaiReo.Nuget.Server.Core
         public static string GetPackageRootFullPath(
             this INugetServerProvider provider)
         {
+            var currentPath = Path.GetFullPath(".");
+
             var baseDir = AppDomain
                 .CurrentDomain
                 .BaseDirectory;
@@ -71,16 +73,16 @@ namespace MaiReo.Nuget.Server.Core
                 ?.NugetServerOptions
                 ?.PackageDirectory))
             {
-                return baseDir;
+                return currentPath ?? baseDir;
             }
 
-            return Path.Combine(baseDir,
+            return Path.Combine(currentPath ?? baseDir,
                 provider
-                ?.NugetServerOptions
+                .NugetServerOptions
                 .PackageDirectory);
         }
 
-        public static IEnumerable<string> GetAllPackages(
+        public static IEnumerable<string> GetAllPackagePaths(
             this INugetServerProvider provider)
             => Directory
             .EnumerateFiles(

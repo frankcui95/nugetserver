@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MaiReo.Nuget.Server.SearchQueryService.Models
+namespace MaiReo.Nuget.Server.Models
 {
-    public class SearchModel
+    public class SearchInputModel
     {
         /// <summary>
         /// The search terms to used to filter packages

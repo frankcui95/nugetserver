@@ -14,6 +14,7 @@
     <RepositoryUrl>https://github.com/MaiReo/nugetserver</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <RootNamespace>MaiReo.Nuget.Server</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

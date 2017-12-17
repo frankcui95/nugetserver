@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -34,6 +35,8 @@ namespace MaiReo.Nuget.Server.Test.Web
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                Console.WriteLine($"BaseDirectory:{AppDomain.CurrentDomain.BaseDirectory}");
+                Console.WriteLine($"CurrentPath:{Path.GetFullPath(".")}");
             }
 
             app.UseMvc();
