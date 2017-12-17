@@ -32,11 +32,27 @@ namespace MaiReo.Nuget.Server.SearchQueryService
             var path_metadatas =
                 provider
                 .GetAllPackagePaths()
-                .Select(p => new { FilePath = p, Nuspec = Zip.ReadNuspec(p) })
+                .Select(p => new
+                {
+                    FilePath = p,
+                    Nuspec = Zip.ReadNuspec(p)
+                })
                 .Where(pn => pn.Nuspec?.Metadata != null)
-                .Select(pn => new { pn.FilePath, pn.Nuspec.Metadata })
+                .Select(pn => new
+                {
+                    pn.FilePath,
+                    pn.Nuspec.Metadata,
+                    Version = (NuGetVersionString)pn.Nuspec.Metadata.Version
+                })
+                .Where(pn =>
+                    searchInputModel.SemVerLevel?.IsSemVer2 == true
+                    ? true
+                    : !pn.Version.IsSemVer2)
+                .Where(pn =>
+                    searchInputModel.PreRelease
+                    ? true
+                    : !pn.Version.IsPrerelease)
                 .OrderBy(pm => pm.Metadata.Id)
-                //.ThenByDescending(pm => pm.Metadata.Version)
                 .GroupBy(pm => pm.Metadata.Id)
                 .Where(x => string.IsNullOrWhiteSpace(searchInputModel.Q)
                     || x.Key.ToLowerInvariant().Contains(searchInputModel.Q.ToLowerInvariant()))
@@ -55,10 +71,10 @@ namespace MaiReo.Nuget.Server.SearchQueryService
 
                 var metadatas = path_metadata
                     .Select(x => x.Metadata)
+                    .OrderBy(x => x.Version)
                     .ToList();
 
-                var latest = metadatas.OrderBy(x =>(NuGetVersionString) x.Version)
-                    .Last();
+                var latest = metadatas.Last();
                 searchOutputModel.Data.Add(new SearchResultModel
                 {
                     Id = latest.Id,

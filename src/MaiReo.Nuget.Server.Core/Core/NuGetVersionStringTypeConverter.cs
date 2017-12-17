@@ -21,11 +21,7 @@ namespace MaiReo.Nuget.Server.Core
 
         public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
         {
-            return destinationType.In((x, y) => x == y,
-                typeof(string),
-                typeof(NuGetVersion),
-                typeof(NuGetVersionString),
-                typeof(object));
+            return destinationType == typeof(string);
         }
 
         public override object CreateInstance(ITypeDescriptorContext context, IDictionary propertyValues)
@@ -53,7 +49,7 @@ namespace MaiReo.Nuget.Server.Core
             }
             if (value is string s)
             {
-                return (NuGetVersionString)s;
+                return new NuGetVersionString(s);
             }
             throw new InvalidCastException();
         }
@@ -62,24 +58,9 @@ namespace MaiReo.Nuget.Server.Core
         {
             if (destinationType == typeof(string))
             {
-                return ((NuGetVersionString)value).ToString();
+                return value?.ToString();
             }
-            if (destinationType == typeof(NuGetVersionString))
-            {
-                return (NuGetVersionString)value;
-            }
-            if (destinationType == typeof(NuGetVersion))
-            {
-                return (NuGetVersion)(NuGetVersionString)value;
-            }
-            if (destinationType == typeof(SemanticVersion))
-            {
-                return (SemanticVersion)(NuGetVersionString)value;
-            }
-            if (destinationType == typeof(object))
-            {
-                return value;
-            }
+
             throw new InvalidCastException();
         }
 
