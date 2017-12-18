@@ -18,16 +18,20 @@ namespace MaiReo.Nuget.Server.RegistrationsBaseUrl
         {
             var excludeSemVer2Package = true;
             var useGzip = false;
-            if (provider.IsMatchResource(context,
-                NugetServerResourceType.RegistrationsBaseUrl_3_6_0))
-            {
-                excludeSemVer2Package = false;
-            }
-            if (provider.IsMatchResource(context,
-                NugetServerResourceType.RegistrationsBaseUrl_3_4_0))
-            {
-                useGzip = true;
-            }
+            /*
+             * Gzip does NOT work.
+             */
+            //if (provider.IsMatchResource(context,
+            //    NugetServerResourceType.RegistrationsBaseUrl_3_6_0))
+            //{
+            //    useGzip = true;
+            //    excludeSemVer2Package = false;
+            //}
+            //if (provider.IsMatchResource(context,
+            //    NugetServerResourceType.RegistrationsBaseUrl_3_4_0))
+            //{
+            //    useGzip = true;
+            //}
             var req = provider.GetRequestingMetadata(context);
             if (req == null)
             {
