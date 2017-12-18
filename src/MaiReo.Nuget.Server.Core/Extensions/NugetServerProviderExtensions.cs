@@ -178,8 +178,7 @@ namespace MaiReo.Nuget.Server.Core
         public static bool IsMatchResources(
             this INugetServerProvider provider,
             HttpContext context,
-            params NugetServerResourceType[] resourceTypes
-            )
+            params NugetServerResourceType[] resourceTypes)
             => context
                 .IsRequestingUrls(provider
                 .GetResourceUrlPaths(resourceTypes));
@@ -187,18 +186,20 @@ namespace MaiReo.Nuget.Server.Core
         public static bool IsMatchResource(
             this INugetServerProvider provider,
             HttpContext context,
-            NugetServerResourceType resourceType
-            )
+            NugetServerResourceType resourceType)
             => context
                 .IsRequestingUrl(provider
                 .GetResourceUrlPath(resourceType));
 
+        public static bool IsMatchExtensionName(
+            this INugetServerProvider provider,
+            HttpContext context,string extensionName)
+            => context
+                .IsRequestingWithExtensionName(extensionName);
+
         public static bool IsMatchPath(
             this INugetServerProvider provider,
-            HttpContext context,
-            PathString path
-            )
-            => context
-                .IsRequestingUrl(path);
+            HttpContext context,PathString path)
+            => context.IsRequestingUrl(path);
     }
 }

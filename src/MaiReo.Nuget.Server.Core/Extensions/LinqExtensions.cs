@@ -59,7 +59,7 @@ namespace System.Linq
                 .OfValueType<string, T>()
                 .FirstOrDefault(x => 
                     string.Equals(key, x.Key, 
-                    StringComparison.CurrentCultureIgnoreCase))
+                    StringComparison.InvariantCultureIgnoreCase))
                 .Value;
         }
     }

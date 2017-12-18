@@ -20,7 +20,7 @@ namespace MaiReo.Nuget.Server.Models
             || string.Equals(x?.Type, y?.Type,
                 System
                 .StringComparison
-                .CurrentCultureIgnoreCase);
+                .InvariantCultureIgnoreCase);
 
         public int GetHashCode(
             ServerIndexResourceModel obj)

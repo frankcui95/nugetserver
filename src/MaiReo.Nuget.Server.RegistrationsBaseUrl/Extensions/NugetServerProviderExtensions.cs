@@ -200,7 +200,8 @@ namespace MaiReo.Nuget.Server.RegistrationsBaseUrl
                 //,
                 //NugetServerResourceType.RegistrationsBaseUrl_3_4_0,
                 //NugetServerResourceType.RegistrationsBaseUrl_3_6_0
-                );
+                )
+                && provider.IsMatchExtensionName(context, ".json");
         }
     }
 }

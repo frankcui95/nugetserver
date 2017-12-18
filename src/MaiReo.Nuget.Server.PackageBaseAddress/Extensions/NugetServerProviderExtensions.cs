@@ -30,7 +30,9 @@ namespace MaiReo.Nuget.Server.PackageBaseAddress
             return provider.IsMatchResource(
                 context,
                 NugetServerResourceType.PackageBaseAddress
-                );
+                )
+                && provider.IsMatchExtensionName(context, ".nupkg");
+
         }
     }
 }

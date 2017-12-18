@@ -58,5 +58,15 @@ namespace Microsoft.AspNetCore.Http
             context
             .Request
             .Path == "/";
+
+        public static bool IsRequestingWithExtensionName(
+            this HttpContext context, string extensionName)
+            =>
+            string.IsNullOrWhiteSpace(extensionName)
+            ? false
+            : context.Request.Path
+            .ToString()
+            .EndsWith(extensionName,StringComparison.InvariantCultureIgnoreCase);
     }
+
 }

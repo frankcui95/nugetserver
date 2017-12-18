@@ -93,7 +93,8 @@ namespace MaiReo.Nuget.Server.ServerIndex
             }
 
             return provider.IsMatchPath(context,
-                provider.GetServiceIndexUrlPath());
+                provider.GetServiceIndexUrlPath())
+                && provider.IsMatchExtensionName(context, ".json");
         }
     }
 }
