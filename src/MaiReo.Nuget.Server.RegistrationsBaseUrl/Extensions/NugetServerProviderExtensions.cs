@@ -43,7 +43,7 @@ namespace MaiReo.Nuget.Server.RegistrationsBaseUrl
             var nuspecs = provider.NuspecProvider.GetAll()
             .Where(nuspec => nuspec.Metadata != null)
             .Where(n => n.Metadata.Id.ToLowerInvariant()
-                    == req.Id.ToLowerInvariant())
+                    == req.Id)
             .Where(n => excludeSemVer2Package == false
                     || !((NuGetVersionString)n.Metadata.Version).IsSemVer2);
             if (!nuspecs.Any())
