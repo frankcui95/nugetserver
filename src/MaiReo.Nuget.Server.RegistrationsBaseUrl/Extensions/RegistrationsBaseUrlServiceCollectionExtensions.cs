@@ -25,16 +25,18 @@ namespace Microsoft.Extensions.DependencyInjection
                        NugetServerResourceType
                        .RegistrationsBaseUrl_3_0_0_rc,
                        "/registration3");
-                    
-                    opt.Resources.Add(
-                        NugetServerResourceType
-                        .RegistrationsBaseUrl_3_4_0,
-                        "/registration3-gz");
+                    /*
+                     * Gzip does NOT work.
+                     */
+                    //opt.Resources.Add(
+                    //    NugetServerResourceType
+                    //    .RegistrationsBaseUrl_3_4_0,
+                    //    "/registration3-gz");
 
-                    opt.Resources.Add(
-                        NugetServerResourceType
-                        .RegistrationsBaseUrl_3_6_0,
-                        "/registration3-gz-semver2");
+                    //opt.Resources.Add(
+                    //    NugetServerResourceType
+                    //    .RegistrationsBaseUrl_3_6_0,
+                    //    "/registration3-gz-semver2");
                     
                 })
             .TryAddTransient<RegistrationsBaseUrlMiddleware>();

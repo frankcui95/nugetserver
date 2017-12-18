@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace MaiReo.Nuget.Server.Core
 {
@@ -30,12 +31,16 @@ namespace MaiReo.Nuget.Server.Core
         }
 
         public static IEnumerable<string> GetAllPackagePaths(
-            this INuspecProvider provider)
+            this INuspecProvider provider,
+            Func<string, bool> predicate = null)
             => Directory
             .EnumerateFiles(
                 provider.GetPackageRootFullPath(),
                 "*.nupkg",
-                SearchOption.AllDirectories);
+                SearchOption.AllDirectories)
+            .Where(predicate ?? True);
+
+        private static bool True(string s) => true;
 
     }
 }

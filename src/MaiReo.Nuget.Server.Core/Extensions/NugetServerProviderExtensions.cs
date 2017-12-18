@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MaiReo.Nuget.Server.Tools;
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
@@ -6,7 +7,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -35,10 +38,19 @@ namespace MaiReo.Nuget.Server.Core
             };
         }
 
+
+        public static void RespondNotFound(
+            this INugetServerProvider provider,
+            HttpContext context)
+            => context.Response.StatusCode
+            = (int)HttpStatusCode.NotFound;
+
+
         public static async Task WriteJsonResponseAsync<T>(
             this INugetServerProvider provider,
             HttpContext context, T value,
-            JsonSerializer serializer = null)
+            JsonSerializer serializer = null,
+            bool useGzip = false)
             where T : class
         {
             serializer = serializer ?? CreateJsonSerializer(provider);
@@ -50,17 +62,20 @@ namespace MaiReo.Nuget.Server.Core
             }
 
             context.Response.StatusCode
-                = (int)System.Net.HttpStatusCode.OK;
-            using (var content = new StringContent(
-                sb.ToString(),
-                Encoding.UTF8,
-                "application/json"))
-            {
+                = (int)HttpStatusCode.OK;
 
+            using (var content = CreateHttpContent(
+                sb, useGzip: useGzip))
+            {
                 context.Response.ContentLength
                        = content.Headers.ContentLength;
                 context.Response.ContentType
                     = content.Headers.ContentType.ToString();
+                if (content.Headers.ContentEncoding.Any())
+                {
+                    context.Response.Headers["Content-Encoding"] =
+                        content.Headers.ContentEncoding.ToArray();
+                }
 
                 if (HttpMethods.IsHead(context.Request.Method))
                 {
@@ -69,14 +84,33 @@ namespace MaiReo.Nuget.Server.Core
 
                 if (HttpMethods.IsGet(context.Request.Method))
                 {
-
-                    await Task.Run(
-                        () =>
-                        content.CopyToAsync(
+                    await Task.Run(async () =>
+                        await content.CopyToAsync(
                             context.Response.Body),
                             context.RequestAborted);
                 }
 
+            }
+        }
+
+        private static HttpContent CreateHttpContent(
+            StringBuilder stringBuilder,
+            string contentType = "application/json",
+            bool useGzip = false)
+        {
+            var encoding = Encoding.UTF8;
+            if (useGzip)
+            {
+                var content = new ByteArrayContent(Gzip.Write(stringBuilder, encoding));
+                content.Headers.ContentEncoding.Clear();
+                content.Headers.ContentEncoding.Add("gzip");
+                content.Headers.ContentType = MediaTypeHeaderValue.Parse(contentType);
+                content.Headers.ContentType.CharSet = "utf-8";
+                return content;
+            }
+            else
+            {
+                return new StringContent(stringBuilder.ToString(), encoding, contentType);
             }
         }
 

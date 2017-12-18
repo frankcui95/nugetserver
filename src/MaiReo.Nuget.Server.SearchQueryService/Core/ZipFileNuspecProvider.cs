@@ -1,6 +1,7 @@
 ﻿using MaiReo.Nuget.Server.Models;
 using MaiReo.Nuget.Server.Tools;
 using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 
 namespace MaiReo.Nuget.Server.Core
@@ -15,9 +16,9 @@ namespace MaiReo.Nuget.Server.Core
 
         public NugetServerOptions NugetServerOptions { get; private set; }
 
-        public virtual IEnumerable<Nuspec> GetAll()
+        public virtual IEnumerable<Nuspec> GetAll(Func<string, bool> predicate = null)
         {
-            foreach (var filePath in this.GetAllPackagePaths())
+            foreach (var filePath in this.GetAllPackagePaths(predicate))
             {
                 var nuspec = Zip.ReadNuspec(filePath);
                 nuspec.FilePath = filePath;
