@@ -90,12 +90,12 @@ namespace MaiReo.Nuget.Server.SearchQueryService
                         StringSplitOptions.RemoveEmptyEntries)
                         ?.ToList() ?? new List<string>(0),
                     Title = latest.Id,
-                    Version = latest.Version,
+                    Version = (NuGetVersionString)latest.Version,
                     LicenseUrl = latest.LicenseUrl,
                     Versions = metadatas.Select(m => new SearchResultPackageVersionModel
                     {
                         Id = $"{registrationsBaseUrl}/{packageIdLowerInvariant}/{m.Version}.json",
-                        Version = m.Version
+                        Version = (NuGetVersionString)m.Version
                     }).ToList(),
                 });
             }

@@ -45,6 +45,35 @@ namespace MaiReo.Nuget.Server.Core
             => context.Response.StatusCode
             = (int)HttpStatusCode.NotFound;
 
+        public static async Task WriteRawResponseAsync(
+            this INugetServerProvider provider,
+            HttpContext context, string contentType,
+             byte[] raw, int bufferSize = 1024)
+        {
+            if (raw == null)
+            {
+                provider.RespondNotFound(context);
+                return;
+            }
+            context.Response.StatusCode
+                = (int)HttpStatusCode.OK;
+            context.Response.ContentLength = raw.Length;
+            context.Response.ContentType = contentType;
+
+            if (HttpMethods.IsHead(context.Request.Method))
+            {
+                return;
+            }
+
+            if (HttpMethods.IsGet(context.Request.Method))
+            {
+                using (var ms = new MemoryStream(raw))
+                {
+                    await ms.CopyToAsync(context.Response.Body,
+                        bufferSize, context.RequestAborted);
+                }
+            }
+        }
 
         public static async Task WriteJsonResponseAsync<T>(
             this INugetServerProvider provider,
@@ -53,6 +82,11 @@ namespace MaiReo.Nuget.Server.Core
             bool useGzip = false)
             where T : class
         {
+            if (value == null)
+            {
+                provider.RespondNotFound(context);
+                return;
+            }
             serializer = serializer ?? CreateJsonSerializer(provider);
 
             var sb = new StringBuilder();
@@ -193,13 +227,13 @@ namespace MaiReo.Nuget.Server.Core
 
         public static bool IsMatchExtensionName(
             this INugetServerProvider provider,
-            HttpContext context,string extensionName)
+            HttpContext context, string extensionName)
             => context
                 .IsRequestingWithExtensionName(extensionName);
 
         public static bool IsMatchPath(
             this INugetServerProvider provider,
-            HttpContext context,PathString path)
+            HttpContext context, PathString path)
             => context.IsRequestingUrl(path);
     }
 }

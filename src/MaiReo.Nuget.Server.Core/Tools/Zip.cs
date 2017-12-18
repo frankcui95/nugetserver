@@ -8,6 +8,7 @@ using System.Linq;
 using System.Xml.Serialization;
 using MaiReo.Nuget.Server.Models;
 using System.Xml;
+using System.Threading.Tasks;
 
 namespace MaiReo.Nuget.Server.Tools
 {
@@ -45,6 +46,66 @@ namespace MaiReo.Nuget.Server.Tools
             {
             }
             return default(Nuspec);
+        }
+
+        public static byte[] ReadNuspecRaw(Nuspec nuspec)
+        {
+            if (nuspec == null)
+            {
+                return null;
+            }
+            try
+            {
+                using (var arc = ZipFile.OpenRead(nuspec.FilePath))
+                {
+                    var nuspecEntry = arc.Entries
+                        .Where(e => e.FullName == e.Name)
+                        .FirstOrDefault(e => e.Name.EndsWith(".nuspec"));
+                    if (nuspecEntry == null) return null;
+
+                    using (var ms = new MemoryStream())
+                    using (var zipStream = nuspecEntry.Open())
+                    {
+                        zipStream.CopyTo(ms);
+                        return ms.ToArray();
+                    }
+
+                }
+            }
+            catch
+            {
+            }
+            return null;
+        }
+
+        public static async Task<byte[]> ReadNuspecRawAsync(Nuspec nuspec)
+        {
+            if (nuspec == null)
+            {
+                return null;
+            }
+            try
+            {
+                using (var arc = ZipFile.OpenRead(nuspec.FilePath))
+                {
+                    var nuspecEntry = arc.Entries
+                        .Where(e => e.FullName == e.Name)
+                        .FirstOrDefault(e => e.Name.EndsWith(".nuspec"));
+                    if (nuspecEntry == null) return null;
+
+                    using (var ms = new MemoryStream())
+                    using (var zipStream = nuspecEntry.Open())
+                    {
+                        await zipStream.CopyToAsync(ms);
+                        return ms.ToArray();
+                    }
+
+                }
+            }
+            catch
+            {
+            }
+            return null;
         }
     }
 }

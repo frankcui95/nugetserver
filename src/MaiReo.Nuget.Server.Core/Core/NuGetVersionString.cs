@@ -63,35 +63,25 @@ namespace MaiReo.Nuget.Server.Core
             return new NuGetVersionString(NuGetVersion.Parse(version));
         }
 
-        public static implicit operator NuGetVersionString(string version)
+        public static explicit operator NuGetVersionString(string version)
         {
             return Parse(version);
         }
 
-        public static bool operator ==(NuGetVersionString left, object right)
-            => NuGetVersionString.Equals(left, right);
+        
         public static bool operator ==(NuGetVersionString left, string right)
             => NuGetVersionString.Equals(left, right);
-        public static bool operator ==(NuGetVersionString left, SemanticVersion right)
-            => NuGetVersionString.Equals(left, right);
-        public static bool operator ==(object left, NuGetVersionString right)
-           => NuGetVersionString.Equals(right, left);
+        
         public static bool operator ==(string left, NuGetVersionString right)
             => NuGetVersionString.Equals(right, left);
-        public static bool operator ==(SemanticVersion left, NuGetVersionString right)
-            => NuGetVersionString.Equals(right, left);
-        public static bool operator !=(NuGetVersionString left, object right)
-           => !NuGetVersionString.Equals(left, right);
+      
         public static bool operator !=(NuGetVersionString left, string right)
             => !NuGetVersionString.Equals(left, right);
-        public static bool operator !=(NuGetVersionString left, SemanticVersion right)
-            => !NuGetVersionString.Equals(left, right);
-        public static bool operator !=(object left, NuGetVersionString right)
-            => !NuGetVersionString.Equals(right, left);
+        
+       
         public static bool operator !=(string left, NuGetVersionString right)
             => !NuGetVersionString.Equals(right, left);
-        public static bool operator !=(SemanticVersion left, NuGetVersionString right)
-            => !NuGetVersionString.Equals(right, left);
+       
 
         public static bool operator >(NuGetVersionString left, string right)
             => (SemanticVersion)left > (NuGetVersionString)right;

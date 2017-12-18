@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using MaiReo.Nuget.Server.ServerIndex;
+using Microsoft.Extensions.Logging;
 
 namespace MaiReo.Nuget.Server.Middlewares
 {
