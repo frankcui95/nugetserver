@@ -83,7 +83,8 @@ namespace MaiReo.Nuget.Server.SearchQueryService
                     ProjectUrl = latest.ProjectUrl,
                     IconUrl = latest.IconUrl,
                     Registration = $"{registrationsBaseUrl}/{packageIdLowerInvariant}/index.json",
-                    Summary = latest.ReleaseNotes,
+                    Id_alias = $"{registrationsBaseUrl}/{packageIdLowerInvariant}/index.json",
+                    Summary = latest.ReleaseNotes ?? latest.Description,
                     Tags = latest.Tags?.Split(
                         new[] { ',' },
                         StringSplitOptions.RemoveEmptyEntries)

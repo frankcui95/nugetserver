@@ -1,4 +1,5 @@
 ﻿using MaiReo.Nuget.Server.Core;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,11 +24,20 @@ namespace MaiReo.Nuget.Server.Models
             Summary = string.Empty;
             Tags = new List<string>();
             Title = string.Empty;
+            Type = "Package";
         }
         /// <summary>
         /// The ID of the matched package
         /// </summary>
         public string Id { get; set; }
+
+        [JsonProperty("@id")]
+        public string Id_alias { get; set; }
+        /// <summary>
+        /// The type of the matched package
+        /// </summary>
+        [JsonProperty("@type")]
+        public string Type { get; set; }
 
         /// <summary>
         /// The full SemVer 2.0.0 version string of the package (could contain build metadata)

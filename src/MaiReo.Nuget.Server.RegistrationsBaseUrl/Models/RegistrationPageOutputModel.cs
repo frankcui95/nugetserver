@@ -9,7 +9,6 @@ namespace MaiReo.Nuget.Server.Models
     {
         public RegistrationPageOutputModel()
         {
-            Items = new List<object>(0);
         }
         /// <summary>
         /// The URL to the registration page
@@ -23,7 +22,7 @@ namespace MaiReo.Nuget.Server.Models
         /// <summary>
         /// The array of registration leaves and their associate metadata
         /// </summary>
-        public List<object> Items { get; set; }
+        public List<RegistrationLeafOutputModel> Items { get; set; }
         /// <summary>
         /// The lowest SemVer 2.0.0 version in the page (inclusive)
         /// </summary>
