@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 
 namespace System.Linq
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     internal static class LinqExtensions
     {
         public static bool In<T>(this T @this, Func<T, T, bool> comparer, params T[] range)

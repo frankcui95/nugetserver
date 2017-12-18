@@ -3,9 +3,11 @@ using MaiReo.Nuget.Server.Tools;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace MaiReo.Nuget.Server.Core
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public class ZipFileNuspecProvider : INuspecProvider
     {
         public ZipFileNuspecProvider(

@@ -14,6 +14,7 @@ using System.Collections;
 
 namespace Microsoft.AspNetCore.Http
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class HttpContextExtensions
     {
         public static T FromQueryString<T>(

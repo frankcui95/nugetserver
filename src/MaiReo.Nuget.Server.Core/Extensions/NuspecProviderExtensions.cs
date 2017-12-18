@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 
 namespace MaiReo.Nuget.Server.Core
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class NuspecProviderExtensions
     {
         public static string GetPackageRootFullPath(

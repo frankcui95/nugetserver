@@ -9,6 +9,7 @@ using System.Text;
 
 namespace MaiReo.Nuget.Server.Core
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public class NuGetVersionStringTypeConverter : TypeConverter
     {
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
