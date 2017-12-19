@@ -16,6 +16,8 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <RootNamespace>MaiReo.Nuget.Server</RootNamespace>
     <PackageIconUrl>https://raw.githubusercontent.com/MaiReo/nugetserver/master/icon.ico</PackageIconUrl>
+    <AssemblyVersion>1.0.0.1</AssemblyVersion>
+    <FileVersion>1.0.0.1</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

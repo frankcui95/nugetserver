@@ -58,25 +58,7 @@ namespace MaiReo.Nuget.Server.PackagePublish
                     context, HttpStatusCode.BadRequest );
                 return;
             }
-            var packages =
-            provider
-                .NuspecProvider
-                .GetAll()
-                .Where( n => n.Metadata != null )
-                .Where( n => string.Equals(
-                     n.Metadata.Id, request.Id,
-                     StringComparison
-                     .InvariantCultureIgnoreCase ) )
-                .Where( n =>
-                    (NuGetVersionString)n.Metadata.Version
-                    == request.Version )
-                    .ToList();
-            if (packages.Count != 0)
-            {
-                provider.RespondWithStatusCode(
-                    context, HttpStatusCode.Conflict );
-                return;
-            }
+
 
             try
             {
@@ -88,7 +70,7 @@ namespace MaiReo.Nuget.Server.PackagePublish
                     context, HttpStatusCode.BadRequest );
                     return;
                 }
-                    
+
                 using (var formFileStream = formFile.OpenReadStream())
                 using (var inputStream = new MemoryStream())
                 {
@@ -99,12 +81,32 @@ namespace MaiReo.Nuget.Server.PackagePublish
                     var nuspec = await
                         Zip.ReadNuspecFromPackageAsync(
                         inputStream );
-                    if (nuspec == null)
+                    if (nuspec?.Metadata == null)
                     {
                         provider.RespondWithStatusCode(
                             context, HttpStatusCode.BadRequest );
                         return;
                     }
+                    var packages =
+                        provider
+                        .NuspecProvider
+                        .GetAll()
+                        .Where( n => n.Metadata != null )
+                        .Where( n => string.Equals(
+                             n.Metadata.Id, nuspec.Metadata.Id,
+                             StringComparison
+                             .InvariantCultureIgnoreCase ) )
+                        .Where( n =>
+                            (NuGetVersionString)n.Metadata.Version
+                            == nuspec.Metadata.Version )
+                            .ToList();
+                    if (packages.Count != 0)
+                    {
+                        provider.RespondWithStatusCode(
+                            context, HttpStatusCode.Conflict );
+                        return;
+                    }
+
                     inputStream.Seek( 0, SeekOrigin.Begin );
                     var isAdded = await provider.NupkgProvider.AddAsync(
                         nuspec.Metadata,
