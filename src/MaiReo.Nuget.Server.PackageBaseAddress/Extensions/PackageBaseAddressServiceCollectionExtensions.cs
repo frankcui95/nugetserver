@@ -12,13 +12,15 @@ namespace Microsoft.Extensions.DependencyInjection
             this IServiceCollection services,
             string url = null)
         {
+            services.TryAddTransient
+            <NugetServerPackageBaseAddressMiddleware>();
+
             services.AddNugetServerCore(
                 opt => opt.Resources.Add(
                    NugetServerResourceType
                    .PackageBaseAddress,
-                    url ?? "/flatcontainer"))
-            .TryAddTransient
-            <NugetServerPackageBaseAddressMiddleware>();
+                    url ?? "/flatcontainer" ) );
+            
 
             return services;
         }

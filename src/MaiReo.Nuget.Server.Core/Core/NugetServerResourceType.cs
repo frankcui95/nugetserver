@@ -23,7 +23,7 @@ namespace MaiReo.Nuget.Server
     public static class NugetServerResourceTypes
     {
         public const string PackageBaseAddress = nameof(PackageBaseAddress) + "/3.0.0";
-        public const string PackagePublish = nameof(PackagePublish);
+        public const string PackagePublish = nameof(PackagePublish) + "/2.0.0";
         public const string RegistrationsBaseUrl = nameof(RegistrationsBaseUrl);
         public const string RegistrationsBaseUrl_3_0_0_beta = nameof(RegistrationsBaseUrl) + "/3.0.0-beta";
         public const string RegistrationsBaseUrl_3_0_0_rc = nameof(RegistrationsBaseUrl) + "/3.0.0-rc";

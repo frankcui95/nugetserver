@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MaiReo.Nuget.Server.Core
 {
-    [EditorBrowsable(EditorBrowsableState.Never)]
+    [EditorBrowsable( EditorBrowsableState.Never )]
     public interface INugetServerProvider
     {
         NugetServerOptions NugetServerOptions { get; }
@@ -15,5 +15,9 @@ namespace MaiReo.Nuget.Server.Core
         MvcJsonOptions MvcJsonOptions { get; }
 
         INuspecProvider NuspecProvider { get; }
+
+        INupkgProvider NupkgProvider { get; }
+
+        IPackageStatusProvider PackageStatusProvider { get; }
     }
 }

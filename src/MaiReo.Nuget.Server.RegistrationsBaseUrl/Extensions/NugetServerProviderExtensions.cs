@@ -136,6 +136,7 @@ namespace MaiReo.Nuget.Server.RegistrationsBaseUrl
                             Title = metadata.Id,
                             Version = metadata.Version,
                             LicenseUrl = metadata.LicenseUrl,
+                            Listed = !provider.PackageStatusProvider.IsDeleted(metadata.Id,metadata.Version),
                             RequireLicenseAcceptance = metadata.RequireLicenseAcceptance,
                             PackageContent =  packageContentBase +
                              $"/{metadata.Id.ToLowerInvariant()}" +

@@ -4,23 +4,30 @@ using System.ComponentModel;
 
 namespace MaiReo.Nuget.Server.Core
 {
-    [EditorBrowsable(EditorBrowsableState.Never)]
+    [EditorBrowsable( EditorBrowsableState.Never )]
     public class NugetServerProvider : INugetServerProvider
     {
         public NugetServerProvider(
             IOptions<NugetServerOptions> nugetServerOptionsAccessor,
             IOptions<MvcJsonOptions> mvcJsonOptionsAccessor,
-            INuspecProvider nuspecProvider)
+            INuspecProvider nuspecProvider,
+            IPackageStatusProvider packageStatusProvider,
+            INupkgProvider nupkgProvider )
         {
             this.NugetServerOptions = nugetServerOptionsAccessor.Value;
             this.MvcJsonOptions = mvcJsonOptionsAccessor.Value;
             this.NuspecProvider = nuspecProvider;
+            this.PackageStatusProvider = packageStatusProvider;
+            this.NupkgProvider = nupkgProvider;
         }
 
-        public NugetServerOptions NugetServerOptions { get; private set; }
+        public NugetServerOptions NugetServerOptions { get; }
 
-        public MvcJsonOptions MvcJsonOptions { get; private set; }
+        public MvcJsonOptions MvcJsonOptions { get;  }
 
-        public INuspecProvider NuspecProvider { get; private set; }
+        public INuspecProvider NuspecProvider { get; }
+        public IPackageStatusProvider PackageStatusProvider { get; }
+
+        public INupkgProvider NupkgProvider { get; }
     }
 }

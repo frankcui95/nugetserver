@@ -8,21 +8,30 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static IServiceCollection AddNugetServerCore(
             this IServiceCollection services,
-            Action<NugetServerOptions> setupAction = null)
+            Action<NugetServerOptions> setupAction = null )
         {
             services
-            .Configure(setupAction ?? (opts => { }))
-            .TryAddTransient<INugetServerProvider,NugetServerProvider>();
+            .Configure( setupAction ?? (opts => { }) );
+
+            services.TryAddTransient
+                <INupkgProvider, NupkgProvider>();
+
+            services.TryAddTransient
+                <IPackageStatusProvider, UnListPackageStatusProvider>();
+
+            services.TryAddTransient
+                <INugetServerProvider, NugetServerProvider>();
+
 
             return services;
         }
 
         public static IServiceCollection ConfigureNugetServer(
             this IServiceCollection services,
-            Action<NugetServerOptions> setupAction)
+            Action<NugetServerOptions> setupAction )
             =>
             services
-            .PostConfigure(setupAction 
-                ?? throw new ArgumentNullException(nameof(setupAction)));
+            .PostConfigure( setupAction
+                ?? throw new ArgumentNullException( nameof( setupAction ) ) );
     }
 }

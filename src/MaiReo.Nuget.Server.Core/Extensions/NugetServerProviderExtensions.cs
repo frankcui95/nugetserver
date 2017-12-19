@@ -15,11 +15,11 @@ using System.Threading.Tasks;
 
 namespace MaiReo.Nuget.Server.Core
 {
-    [EditorBrowsable(EditorBrowsableState.Never)]
+    [EditorBrowsable( EditorBrowsableState.Never )]
     public static class NugetServerProviderExtensions
     {
         public static JsonSerializer CreateJsonSerializer(
-            this INugetServerProvider provider)
+            this INugetServerProvider provider )
         {
             return new JsonSerializer
             {
@@ -38,21 +38,29 @@ namespace MaiReo.Nuget.Server.Core
             };
         }
 
-
         public static void RespondNotFound(
             this INugetServerProvider provider,
-            HttpContext context)
+            HttpContext context )
+            => provider.RespondWithStatusCode(
+                context, HttpStatusCode.NotFound );
+
+        public static void RespondWithStatusCode(
+            this INugetServerProvider provider,
+            HttpContext context,
+            HttpStatusCode statusCode )
             => context.Response.StatusCode
-            = (int)HttpStatusCode.NotFound;
+            = (int)statusCode;
+
+
 
         public static async Task WriteRawResponseAsync(
             this INugetServerProvider provider,
             HttpContext context, string contentType,
-             byte[] raw, int bufferSize = 1024)
+             byte[] raw, int bufferSize = 1024 )
         {
             if (raw == null)
             {
-                provider.RespondNotFound(context);
+                provider.RespondNotFound( context );
                 return;
             }
             context.Response.StatusCode
@@ -60,17 +68,17 @@ namespace MaiReo.Nuget.Server.Core
             context.Response.ContentLength = raw.Length;
             context.Response.ContentType = contentType;
 
-            if (HttpMethods.IsHead(context.Request.Method))
+            if (HttpMethods.IsHead( context.Request.Method ))
             {
                 return;
             }
 
-            if (HttpMethods.IsGet(context.Request.Method))
+            if (HttpMethods.IsGet( context.Request.Method ))
             {
-                using (var ms = new MemoryStream(raw))
+                using (var ms = new MemoryStream( raw ))
                 {
-                    await ms.CopyToAsync(context.Response.Body,
-                        bufferSize, context.RequestAborted);
+                    await ms.CopyToAsync( context.Response.Body,
+                        bufferSize, context.RequestAborted );
                 }
             }
         }
@@ -79,27 +87,27 @@ namespace MaiReo.Nuget.Server.Core
             this INugetServerProvider provider,
             HttpContext context, T value,
             JsonSerializer serializer = null,
-            bool useGzip = false)
+            bool useGzip = false )
             where T : class
         {
             if (value == null)
             {
-                provider.RespondNotFound(context);
+                provider.RespondNotFound( context );
                 return;
             }
-            serializer = serializer ?? CreateJsonSerializer(provider);
+            serializer = serializer ?? CreateJsonSerializer( provider );
 
             var sb = new StringBuilder();
-            using (var sw = new StringWriter(sb))
+            using (var sw = new StringWriter( sb ))
             {
-                serializer.Serialize(sw, value);
+                serializer.Serialize( sw, value );
             }
 
             context.Response.StatusCode
                 = (int)HttpStatusCode.OK;
 
             using (var content = CreateHttpContent(
-                sb, useGzip: useGzip))
+                sb, useGzip: useGzip ))
             {
                 context.Response.ContentLength
                        = content.Headers.ContentLength;
@@ -111,17 +119,17 @@ namespace MaiReo.Nuget.Server.Core
                         content.Headers.ContentEncoding.ToArray();
                 }
 
-                if (HttpMethods.IsHead(context.Request.Method))
+                if (HttpMethods.IsHead( context.Request.Method ))
                 {
                     return;
                 }
 
-                if (HttpMethods.IsGet(context.Request.Method))
+                if (HttpMethods.IsGet( context.Request.Method ))
                 {
-                    await Task.Run(async () =>
-                        await content.CopyToAsync(
-                            context.Response.Body),
-                            context.RequestAborted);
+                    await Task.Run( async () =>
+                         await content.CopyToAsync(
+                             context.Response.Body ),
+                            context.RequestAborted );
                 }
 
             }
@@ -130,26 +138,26 @@ namespace MaiReo.Nuget.Server.Core
         private static HttpContent CreateHttpContent(
             StringBuilder stringBuilder,
             string contentType = "application/json",
-            bool useGzip = false)
+            bool useGzip = false )
         {
             var encoding = Encoding.UTF8;
             if (useGzip)
             {
-                var content = new ByteArrayContent(Gzip.Write(stringBuilder, encoding));
+                var content = new ByteArrayContent( Gzip.Write( stringBuilder, encoding ) );
                 content.Headers.ContentEncoding.Clear();
-                content.Headers.ContentEncoding.Add("gzip");
-                content.Headers.ContentType = MediaTypeHeaderValue.Parse(contentType);
+                content.Headers.ContentEncoding.Add( "gzip" );
+                content.Headers.ContentType = MediaTypeHeaderValue.Parse( contentType );
                 content.Headers.ContentType.CharSet = "utf-8";
                 return content;
             }
             else
             {
-                return new StringContent(stringBuilder.ToString(), encoding, contentType);
+                return new StringContent( stringBuilder.ToString(), encoding, contentType );
             }
         }
 
         public static PathString GetApiMajorVersionUrl(
-            this INugetServerProvider provider)
+            this INugetServerProvider provider )
         {
             var majorVersion = provider
                 ?.NugetServerOptions
@@ -158,19 +166,19 @@ namespace MaiReo.Nuget.Server.Core
             if (!majorVersion.HasValue)
             {
                 throw new InvalidOperationException(
-                    "Nuget server api version not specified.");
+                    "Nuget server api version not specified." );
             }
             return "/v" + majorVersion;
 
         }
         public static PathString GetResourceValue(
             this INugetServerProvider provider,
-            NugetServerResourceType resourceType)
+            NugetServerResourceType resourceType )
             =>
             provider
             ?.NugetServerOptions
             ?.Resources
-            ?.ContainsKey(resourceType) != true
+            ?.ContainsKey( resourceType ) != true
             ? null
             : provider
             .NugetServerOptions
@@ -179,61 +187,61 @@ namespace MaiReo.Nuget.Server.Core
 
         public static PathString GetResourceUrlPath(
             this INugetServerProvider provider,
-            NugetServerResourceType resourceType)
+            NugetServerResourceType resourceType )
         {
             var majorVersion = provider
                 .GetApiMajorVersionUrl();
 
             var path = provider.GetResourceValue(
-                    resourceType);
+                    resourceType );
             if (!path.HasValue)
             {
                 throw new InvalidOperationException(
                     "Nuget server resource " +
                     resourceType +
-                    " not specified.");
+                    " not specified." );
             }
             return majorVersion + path;
         }
         public static IEnumerable<PathString> GetResourceUrlPaths(
             this INugetServerProvider provider,
-            params NugetServerResourceType[] resourceTypes) =>
+            params NugetServerResourceType[] resourceTypes ) =>
             resourceTypes
-            ?.Select(t => GetResourceUrlPath(provider, t))
+            ?.Select( t => GetResourceUrlPath( provider, t ) )
             ?? Enumerable.Empty<PathString>();
 
         public static bool IsMatchVerbs(
             this INugetServerProvider provider,
             HttpContext context,
-            params Func<string, bool>[] verbs)
+            params Func<string, bool>[] verbs )
             => verbs?.Any(
-                v => v?.Invoke(context.Request.Method) == true) == true;
+                v => v?.Invoke( context.Request.Method ) == true ) == true;
 
         public static bool IsMatchResources(
             this INugetServerProvider provider,
             HttpContext context,
-            params NugetServerResourceType[] resourceTypes)
+            params NugetServerResourceType[] resourceTypes )
             => context
-                .IsRequestingUrls(provider
-                .GetResourceUrlPaths(resourceTypes));
+                .IsRequestingUrls( provider
+                .GetResourceUrlPaths( resourceTypes ) );
 
         public static bool IsMatchResource(
             this INugetServerProvider provider,
             HttpContext context,
-            NugetServerResourceType resourceType)
+            NugetServerResourceType resourceType )
             => context
-                .IsRequestingUrl(provider
-                .GetResourceUrlPath(resourceType));
+                .IsRequestingUrl( provider
+                .GetResourceUrlPath( resourceType ) );
 
         public static bool IsMatchExtensionName(
             this INugetServerProvider provider,
-            HttpContext context, string extensionName)
+            HttpContext context, string extensionName )
             => context
-                .IsRequestingWithExtensionName(extensionName);
+                .IsRequestingWithExtensionName( extensionName );
 
         public static bool IsMatchPath(
             this INugetServerProvider provider,
-            HttpContext context, PathString path)
-            => context.IsRequestingUrl(path);
+            HttpContext context, PathString path )
+            => context.IsRequestingUrl( path );
     }
 }

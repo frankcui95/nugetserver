@@ -11,9 +11,10 @@ namespace Microsoft.Extensions.DependencyInjection
             this IServiceCollection services,
             Action<NugetServerOptions> setupAction = null)
         {
+            services.TryAddTransient<NugetServerIndexMiddleware>();
+
             services
-            .AddNugetServerCore(setupAction)
-            .TryAddTransient<NugetServerIndexMiddleware>();
+            .AddNugetServerCore( setupAction );
 
             return services;
         }

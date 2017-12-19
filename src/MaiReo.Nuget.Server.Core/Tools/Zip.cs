@@ -14,59 +14,54 @@ namespace MaiReo.Nuget.Server.Tools
 {
     public static class Zip
     {
-        static Zip()
-        {
-            SerializerFactory = new XmlSerializerFactory();
-            NuspecSerializer = SerializerFactory.CreateSerializer(typeof(Nuspec));
-        }
-        private static readonly XmlSerializerFactory SerializerFactory;
 
-        private static readonly XmlSerializer NuspecSerializer;
 
-        public static Nuspec ReadNuspec(string fileName)
+        public static Nuspec ReadNuspec( string fileName )
         {
             try
             {
-                using (var arc = ZipFile.OpenRead(fileName))
+                using (var arc = ZipFile.OpenRead( fileName ))
                 {
-                    var nuspec = arc.Entries
-                        .Where(e => e.FullName == e.Name)
-                        .FirstOrDefault(e => e.Name.EndsWith(".nuspec"));
-                    if (nuspec == null) return default(Nuspec);
-                    using (var zipStream = nuspec.Open())
-                    using (var xmlReader = new XmlTextReader(zipStream))
+                    var nuspecEntry = arc.Entries
+                        .Where( e => e.FullName == e.Name )
+                        .FirstOrDefault( e => e.Name.EndsWith( ".nuspec" ) );
+                    if (nuspecEntry == null) return default( Nuspec );
+                    using (var zipStream = nuspecEntry.Open())
                     {
-                        //annoying diff xmlns
-                        xmlReader.Namespaces = false;
-                        return (Nuspec)NuspecSerializer.Deserialize(xmlReader);
+                        Nuspec.TryParse( zipStream, out var nuspec );
+                        return nuspec;
                     }
                 }
+
             }
             catch
             {
             }
-            return default(Nuspec);
+            return default( Nuspec );
         }
 
-        public static byte[] ReadNuspecRaw(Nuspec nuspec)
+        public static async Task<byte[]>
+        ReadNuspecRawAsync( Nuspec nuspec )
         {
             if (nuspec == null)
-            {
                 return null;
-            }
             try
             {
-                using (var arc = ZipFile.OpenRead(nuspec.FilePath))
+                using (var arc =
+                    ZipFile.OpenRead( nuspec.FilePath ))
                 {
                     var nuspecEntry = arc.Entries
-                        .Where(e => e.FullName == e.Name)
-                        .FirstOrDefault(e => e.Name.EndsWith(".nuspec"));
-                    if (nuspecEntry == null) return null;
+                        .Where( e =>
+                            e.FullName == e.Name )
+                        .FirstOrDefault( e =>
+                            e.Name.EndsWith( ".nuspec" ) );
+                    if (nuspecEntry == null)
+                        return null;
 
                     using (var ms = new MemoryStream())
                     using (var zipStream = nuspecEntry.Open())
                     {
-                        zipStream.CopyTo(ms);
+                        await zipStream.CopyToAsync( ms );
                         return ms.ToArray();
                     }
 
@@ -78,28 +73,28 @@ namespace MaiReo.Nuget.Server.Tools
             return null;
         }
 
-        public static async Task<byte[]> ReadNuspecRawAsync(Nuspec nuspec)
+        public static async Task<Nuspec>
+        ReadNuspecFromPackageAsync( Stream package )
         {
-            if (nuspec == null)
-            {
+            var nuspecRaw = await ReadNuspecRawFromPackageAsync( package );
+            Nuspec.TryParse( nuspecRaw, out var nuspec );
+            return nuspec;
+        }
+
+
+        public static async Task<byte[]>
+        ReadNuspecRawFromPackageAsync( byte[] package )
+        {
+            if (package == null)
                 return null;
-            }
             try
             {
-                using (var arc = ZipFile.OpenRead(nuspec.FilePath))
+                using (var inputStream
+                    = new MemoryStream( package ))
                 {
-                    var nuspecEntry = arc.Entries
-                        .Where(e => e.FullName == e.Name)
-                        .FirstOrDefault(e => e.Name.EndsWith(".nuspec"));
-                    if (nuspecEntry == null) return null;
-
-                    using (var ms = new MemoryStream())
-                    using (var zipStream = nuspecEntry.Open())
-                    {
-                        await zipStream.CopyToAsync(ms);
-                        return ms.ToArray();
-                    }
-
+                    return await
+                        ReadNuspecRawFromPackageAsync(
+                            inputStream );
                 }
             }
             catch
@@ -107,5 +102,43 @@ namespace MaiReo.Nuget.Server.Tools
             }
             return null;
         }
+
+        public static async Task<byte[]>
+        ReadNuspecRawFromPackageAsync( Stream package, bool leaveOpen = true )
+        {
+            if (package == null)
+                return null;
+            if (!package.CanRead)
+                return null;
+
+            try
+            {
+                using (var arc = new ZipArchive(
+                    package, ZipArchiveMode.Read, leaveOpen ))
+                {
+                    var nuspecEntry = arc.Entries
+                        .Where( e =>
+                            e.FullName == e.Name )
+                        .FirstOrDefault( e =>
+                            e.Name.EndsWith( ".nuspec" ) );
+                    if (nuspecEntry == null)
+                        return null;
+
+                    using (var outputStream = new MemoryStream())
+                    using (var zipStream = nuspecEntry.Open())
+                    {
+                        await zipStream
+                            .CopyToAsync( outputStream );
+                        return outputStream.ToArray();
+                    }
+                }
+            }
+            catch
+            {
+            }
+            return null;
+        }
+
+
     }
 }

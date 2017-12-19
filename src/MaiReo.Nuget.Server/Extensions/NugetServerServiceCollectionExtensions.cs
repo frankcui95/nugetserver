@@ -10,12 +10,12 @@ namespace Microsoft.Extensions.DependencyInjection
             Action<NugetServerOptions> setupAction = null)
         {
             return services
-            .AddNugetServerCore()
-            .AddNugetServerIndex()
             .AddNugetServerPackagePublish()
-            .AddNugetServerSearchQueryService()
+            .AddNugetServerPackageBaseAddress()
             .AddNugetServerRegistrationsBaseUrl()
-            .AddNugetServerPackageBaseAddress();
+            .AddNugetServerSearchQueryService()
+            .AddNugetServerIndex()
+            .AddNugetServerCore();
         }
 
         public static IServiceCollection ConfigureNugetServer(

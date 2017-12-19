@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>../../MaiReo.Nuget.Server.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>MaiReo.Nuget.Server.Web.snk</AssemblyOriginatorKeyFile>
     <Copyright>MaiReo</Copyright>
     <Description>Nuget server test web service.</Description>
     <Authors>MaiReo</Authors>
@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\" />
+    <Folder Include="packages\" />
   </ItemGroup>
 
   <ItemGroup>

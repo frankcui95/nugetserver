@@ -8,7 +8,6 @@ namespace MaiReo.Nuget.Server.Core
     [EditorBrowsable(EditorBrowsableState.Never)]
     public interface INuspecProvider
     {
-        NugetServerOptions NugetServerOptions { get; }
         IEnumerable<Nuspec> GetAll(Func<string, bool> predicate = null);
     }
 }

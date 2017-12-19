@@ -1,4 +1,5 @@
 ﻿using MaiReo.Nuget.Server;
+using MaiReo.Nuget.Server.Core;
 using MaiReo.Nuget.Server.Middlewares;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -10,15 +11,18 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection
         AddNugetServerPackagePublish(
             this IServiceCollection services,
-            string url = null)
+            string url = null )
         {
+            services.TryAddTransient
+                <IPackageStatusProvider, NullUnListPackageStatusProvider>();
+
+            services.TryAddTransient
+                <NugetServerPackagePublishMiddleware>();
+
             services.AddNugetServerCore(
                 opt => opt.Resources
-                .Add(NugetServerResourceType.PackagePublish,
-                    url ?? "/package"))
-            .TryAddTransient
-            <NugetServerPackagePublishMiddleware>();
-
+                .Add( NugetServerResourceType.PackagePublish,
+                    url ?? "/package" ) );
             return services;
         }
     }

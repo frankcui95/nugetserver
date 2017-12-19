@@ -12,106 +12,113 @@ using System.Threading.Tasks;
 
 namespace MaiReo.Nuget.Server.PackageBaseAddress
 {
-    [EditorBrowsable(EditorBrowsableState.Never)]
+    [EditorBrowsable( EditorBrowsableState.Never )]
     public static class NugetServerProviderExtensions
     {
         public static async Task RespondAsync(
             this INugetServerProvider provider,
-            HttpContext context)
+            HttpContext context )
         {
             var req = provider
                 .GetRequstingPackageBaseAddressModel(
-                    context);
+                    context );
             if (!req.IsValid())
             {
-                provider.RespondNotFound(context);
+                provider.RespondNotFound( context );
                 return;
             }
             if (req.IsRequestingVersions())
             {
-                await provider.RespondVersionsAsync(context, req);
+                await provider.RespondVersionsAsync( context, req );
                 return;
             }
             if (req.IsRequestingNuspec())
             {
-                await provider.RespondNuspecAsync(context, req);
+                await provider.RespondNuspecAsync( context, req );
                 return;
             }
             if (req.IsRequestingNupkg())
             {
-                await provider.RespondNupkgAsync(context, req);
+                await provider.RespondNupkgAsync( context, req );
                 return;
             }
 
-            provider.RespondNotFound(context);
+            provider.RespondNotFound( context );
         }
         public static async Task RespondNuspecAsync(
             this INugetServerProvider provider,
             HttpContext context,
-            PackageBaseAddressInputModel request)
+            PackageBaseAddressInputModel request )
         {
             var nuspec = provider.NuspecProvider
                 .GetAll()
-                .Where(n => n.Metadata != null)
-                .Where(n => n.Metadata.Id.ToLowerInvariant() == request.Id)
-                .FirstOrDefault(n => n.Metadata.Version == request.Version);
-            var nuspecRaw = await Zip.ReadNuspecRawAsync(nuspec);
+                .Where( n => n.Metadata != null )
+                .Where( n => n.Metadata.Id.ToLowerInvariant() == request.Id )
+                .FirstOrDefault( n => n.Metadata.Version == request.Version );
+            var nuspecRaw = await Zip.ReadNuspecRawAsync( nuspec );
 
             await provider.WriteRawResponseAsync(
-                context, "application/xml; charset=utf8", nuspecRaw);
+                context, "application/xml; charset=utf8", nuspecRaw );
         }
         public static async Task RespondVersionsAsync(
             this INugetServerProvider provider,
             HttpContext context,
-            PackageBaseAddressInputModel request)
+            PackageBaseAddressInputModel request )
         {
             var model = new PackageBaseAddressVersionsOutputModel
             {
                 Versions = provider.NuspecProvider
                 .GetAll()
-                .Where(n => n.Metadata != null)
-                .Where(n => n.Metadata.Id.ToLowerInvariant() == request.Id)
-                .Select(n => n.Metadata.Version)
-                .OrderBy(x => (NuGetVersionString)x)
+                .Where( n => n.Metadata != null )
+                .Where( n => n.Metadata.Id.ToLowerInvariant() == request.Id )
+                .Select( n => n.Metadata.Version )
+                .OrderBy( x => (NuGetVersionString)x )
                 .ToList()
             };
-            await provider.WriteJsonResponseAsync(context, model);
+            await provider.WriteJsonResponseAsync( context, model );
         }
 
         public static async Task RespondNupkgAsync(
             this INugetServerProvider provider,
             HttpContext context,
-            PackageBaseAddressInputModel request)
+            PackageBaseAddressInputModel request )
         {
-            var fsRoot = provider.NuspecProvider
-                    .GetPackageRootFullPath();
-            var fsRootUri = new Uri(fsRoot + "\\",
-                    UriKind.Absolute);
-            var fileUri = request
-                .GetRequestFileUri(fsRootUri);
+            var nupkg = provider.NuspecProvider
+                .GetAll()
+                .Where( n => n.Metadata != null )
+                .Where( n => n.Metadata.Id.ToLowerInvariant() == request.Id )
+                .Where( n => n.Metadata.Version == request.Version )
+                .FirstOrDefault()
+                ;
+            if (nupkg == null)
+            {
+                provider.RespondNotFound( context );
+                return;
+            }
+
             var fileInfo = new PhysicalFileInfo(
-                new FileInfo(fileUri.LocalPath));
+                new FileInfo( nupkg.FilePath ) );
             await context.Response.SendFileAsync(
-                fileInfo, context.RequestAborted);
+                fileInfo, context.RequestAborted );
         }
 
         public static PackageBaseAddressInputModel
             GetRequstingPackageBaseAddressModel(
             this INugetServerProvider provider,
-            HttpContext context)
+            HttpContext context )
             => new PackageBaseAddressInputModel(
                 context.GetBaseUrl(), context.Request.Path,
                 provider.GetResourceUrlPath(
-                NugetServerResourceType.PackageBaseAddress));
+                NugetServerResourceType.PackageBaseAddress ) );
 
         public static bool IsMatch(
             this INugetServerProvider provider,
             HttpContext context
             )
         {
-            if (!provider.IsMatchVerbs(context,
+            if (!provider.IsMatchVerbs( context,
                 HttpMethods.IsHead,
-                HttpMethods.IsGet))
+                HttpMethods.IsGet ))
             {
                 return false;
             }

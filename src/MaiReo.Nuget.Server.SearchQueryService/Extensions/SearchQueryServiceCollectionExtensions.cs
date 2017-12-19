@@ -13,6 +13,12 @@ namespace Microsoft.Extensions.DependencyInjection
             this IServiceCollection services,
             string url = null)
         {
+            services.TryAddTransient
+           <INuspecProvider, ZipFileNuspecProvider>();
+
+            services.TryAddTransient
+            <NugetServerSearchQueryServiceMiddleware>();
+
             services.AddNugetServerCore(
                 opt => 
                 {
@@ -30,11 +36,7 @@ namespace Microsoft.Extensions.DependencyInjection
                          url ?? "/query");
                 });
 
-            services.TryAddTransient
-            <INuspecProvider, ZipFileNuspecProvider>();
-
-            services.TryAddTransient
-            <NugetServerSearchQueryServiceMiddleware>();
+           
 
             return services;
         }

@@ -77,16 +77,6 @@ namespace MaiReo.Nuget.Server.Models
             => _splitedPath.Length == 5
             && Version != default(NuGetVersionString)
             && $"{_splitedPath[2]}.nuspec" == _splitedPath[4];
-
-
-        public Uri GetRequestFileUri(Uri fsRootUri)
-        {
-            var pkgBaseUri = new Uri(BaseUrl +
-                ResourceUrlPath + "/", UriKind.Absolute);
-            var pathUri = new Uri(BaseUrl +
-                RequestPath.ToUriComponent(), UriKind.Absolute);
-            var requestFileUri = pkgBaseUri.MakeRelativeUri(pathUri);
-            return new Uri(fsRootUri, requestFileUri);
-        }
+        
     }
 }

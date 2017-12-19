@@ -7,22 +7,21 @@ using System.ComponentModel;
 
 namespace MaiReo.Nuget.Server.Core
 {
-    [EditorBrowsable(EditorBrowsableState.Never)]
+    [EditorBrowsable( EditorBrowsableState.Never )]
     public class ZipFileNuspecProvider : INuspecProvider
     {
-        public ZipFileNuspecProvider(
-            IOptions<NugetServerOptions> nugetServerOptionsAccessor)
+        public ZipFileNuspecProvider( INupkgProvider nupkgProvider )
         {
-            this.NugetServerOptions = nugetServerOptionsAccessor.Value;
+            this._nupkgProvider = nupkgProvider;
         }
 
-        public NugetServerOptions NugetServerOptions { get; private set; }
+        private readonly INupkgProvider _nupkgProvider;
 
-        public virtual IEnumerable<Nuspec> GetAll(Func<string, bool> predicate = null)
+        public virtual IEnumerable<Nuspec> GetAll( Func<string, bool> predicate = null )
         {
-            foreach (var filePath in this.GetAllPackagePaths(predicate))
+            foreach (var filePath in _nupkgProvider.GetAll( predicate ))
             {
-                var nuspec = Zip.ReadNuspec(filePath);
+                var nuspec = Zip.ReadNuspec( filePath );
                 nuspec.FilePath = filePath;
                 yield return nuspec;
             }
