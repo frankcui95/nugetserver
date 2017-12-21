@@ -16,7 +16,7 @@ namespace Microsoft.Extensions.DependencyInjection
             .AddNugetServerRegistrationsBaseUrl()
             .AddNugetServerSearchQueryService()
             .AddNugetServerIndex()
-            .AddNugetServerCore();
+            .AddNugetServerCore( setupAction );
         }
 
         public static IServiceCollection ConfigureNugetServer(
