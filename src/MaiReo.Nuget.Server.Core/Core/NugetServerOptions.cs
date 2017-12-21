@@ -64,6 +64,7 @@ namespace MaiReo.Nuget.Server.Core
         /// For more infomation, please visit https://docs.microsoft.com/en-us/nuget/api/package-publish-resource
         /// </summary>
         public bool InterpretUnListEnabled { get; set; }
+        public bool CacheEnabled { get; set; }
 
         /// <summary>
         /// Fires when a package is successfully added.
@@ -92,11 +93,8 @@ namespace MaiReo.Nuget.Server.Core
             if (AddPackageCompleted == null) return false;
             try
             {
-                await Task.Factory.FromAsync(
-                        AddPackageCompleted.BeginInvoke,
-                        AddPackageCompleted.EndInvoke
-                        , sender, eventArgs, state: default( object )
-                        );
+                await Task.Run( () => 
+                    AddPackageCompleted( sender, eventArgs ) );
             }
             catch
             {
@@ -111,11 +109,8 @@ namespace MaiReo.Nuget.Server.Core
             if (AddPackageFailed == null) return false;
             try
             {
-                await Task.Factory.FromAsync(
-                        AddPackageFailed.BeginInvoke,
-                        AddPackageFailed.EndInvoke
-                        , sender, eventArgs, state: default( object )
-                        );
+                await Task.Run( () =>
+                    AddPackageFailed( sender, eventArgs ) );
             }
             catch
             {
@@ -137,11 +132,8 @@ namespace MaiReo.Nuget.Server.Core
             if (DeletePackageCompleted == null) return false;
             try
             {
-                await Task.Factory.FromAsync(
-                DeletePackageCompleted.BeginInvoke,
-                DeletePackageCompleted.EndInvoke
-                , sender, eventArgs, state: default( object )
-                );
+                await Task.Run( () =>
+                    DeletePackageCompleted( sender, eventArgs ) );
             }
             catch
             {
@@ -156,11 +148,8 @@ namespace MaiReo.Nuget.Server.Core
             if (DeletePackageFailed == null) return false;
             try
             {
-                await Task.Factory.FromAsync(
-                DeletePackageFailed.BeginInvoke,
-                DeletePackageFailed.EndInvoke
-                , sender, eventArgs, state: default( object )
-                );
+                await Task.Run( () =>
+                   DeletePackageFailed( sender, eventArgs ) );
             }
             catch
             {

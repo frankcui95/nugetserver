@@ -12,13 +12,15 @@ namespace MaiReo.Nuget.Server.Core
             IOptions<MvcJsonOptions> mvcJsonOptionsAccessor,
             INuspecProvider nuspecProvider,
             IPackageStatusProvider packageStatusProvider,
-            INupkgProvider nupkgProvider )
+            INupkgProvider nupkgProvider,
+            ICacheProvider cacheProvider)
         {
             this.NugetServerOptions = nugetServerOptionsAccessor.Value;
             this.MvcJsonOptions = mvcJsonOptionsAccessor.Value;
             this.NuspecProvider = nuspecProvider;
             this.PackageStatusProvider = packageStatusProvider;
             this.NupkgProvider = nupkgProvider;
+            this.CacheProvider = cacheProvider;
         }
 
         public NugetServerOptions NugetServerOptions { get; }
@@ -29,5 +31,6 @@ namespace MaiReo.Nuget.Server.Core
         public IPackageStatusProvider PackageStatusProvider { get; }
 
         public INupkgProvider NupkgProvider { get; }
+        public ICacheProvider CacheProvider { get; }
     }
 }

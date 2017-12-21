@@ -2,11 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>../../MaiReo.Nuget.Server.pfx</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\..\MaiReo.Nuget.Server.pfx</AssemblyOriginatorKeyFile>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Copyright>MaiReo</Copyright>
-    <Description>Nuget API Server Index v3.</Description>
+    <Description>Nuget Server package cache. Only supports In-Memory cache currently.</Description>
     <Authors>MaiReo</Authors>
     <Company />
     <PackageProjectUrl>https://github.com/MaiReo/nugetserver</PackageProjectUrl>
@@ -14,13 +14,16 @@
     <RepositoryUrl>https://github.com/MaiReo/nugetserver</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <RootNamespace>MaiReo.Nuget.Server</RootNamespace>
+    <PackageTags>nuget,nuget-server</PackageTags>
     <PackageIconUrl>https://raw.githubusercontent.com/MaiReo/nugetserver/master/icon.ico</PackageIconUrl>
-    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\MaiReo.Nuget.Server.Core\MaiReo.Nuget.Server.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Events\" />
   </ItemGroup>
 
 </Project>

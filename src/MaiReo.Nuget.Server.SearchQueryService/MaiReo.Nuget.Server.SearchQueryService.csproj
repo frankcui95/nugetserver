@@ -16,10 +16,15 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <RootNamespace>MaiReo.Nuget.Server</RootNamespace>
     <PackageIconUrl>https://raw.githubusercontent.com/MaiReo/nugetserver/master/icon.ico</PackageIconUrl>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\MaiReo.Nuget.Server.Core\MaiReo.Nuget.Server.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Core\" />
   </ItemGroup>
 
 </Project>

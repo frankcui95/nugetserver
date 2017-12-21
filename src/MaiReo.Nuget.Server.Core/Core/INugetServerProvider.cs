@@ -19,5 +19,7 @@ namespace MaiReo.Nuget.Server.Core
         INupkgProvider NupkgProvider { get; }
 
         IPackageStatusProvider PackageStatusProvider { get; }
+
+        ICacheProvider CacheProvider { get; }
     }
 }

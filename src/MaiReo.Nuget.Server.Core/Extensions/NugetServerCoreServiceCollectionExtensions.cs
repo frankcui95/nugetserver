@@ -13,15 +13,28 @@ namespace Microsoft.Extensions.DependencyInjection
             services
             .Configure( setupAction ?? (opts => { }) );
 
-            services.TryAddTransient
+            services.TryAddSingleton
                 <INupkgProvider, NupkgProvider>();
 
-            services.TryAddTransient
+            services.TryAddSingleton
+                <INuspecProvider, ZipFileNuspecProvider>();
+
+            services.TryAddSingleton<ZipFileNuspecProvider>();
+
+            services.TryAddSingleton
+               <ICacheProvider, NoCacheProvider>();
+
+            services.TryAddSingleton<NoCacheProvider>();
+
+            services.TryAddSingleton
                 <IPackageStatusProvider, UnListPackageStatusProvider>();
 
-            services.TryAddTransient
+            services.TryAddSingleton<UnListPackageStatusProvider>();
+
+            services.TryAddSingleton
                 <INugetServerProvider, NugetServerProvider>();
 
+            services.TryAddSingleton<NugetServerProvider>();
 
             return services;
         }

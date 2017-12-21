@@ -13,7 +13,7 @@ namespace Microsoft.Extensions.DependencyInjection
             this IServiceCollection services,
             string url = null )
         {
-            services.TryAddTransient
+            services.TryAddSingleton
                 <IPackageStatusProvider, NullUnListPackageStatusProvider>();
 
             services.TryAddTransient

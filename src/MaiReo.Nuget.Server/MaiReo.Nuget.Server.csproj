@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <ProjectReference Include="..\MaiReo.Nuget.Server.Cache\MaiReo.Nuget.Server.Cache.csproj" />
     <ProjectReference Include="..\MaiReo.Nuget.Server.Core\MaiReo.Nuget.Server.Core.csproj" />
     <ProjectReference Include="..\MaiReo.Nuget.Server.PackageBaseAddress\MaiReo.Nuget.Server.PackageBaseAddress.csproj" />
     <ProjectReference Include="..\MaiReo.Nuget.Server.PackagePublish\MaiReo.Nuget.Server.PackagePublish.csproj" />
@@ -26,6 +27,7 @@
     <PackageReleaseNotes>Nuget server that contains API and gallery, but there is no plan for gallery currently.</PackageReleaseNotes>
     <PackageTags>nuget,nuget-server</PackageTags>
     <PackageIconUrl>https://raw.githubusercontent.com/MaiReo/nugetserver/master/icon.ico</PackageIconUrl>
+    <Version>1.0.3</Version>
   </PropertyGroup>
 
 </Project>

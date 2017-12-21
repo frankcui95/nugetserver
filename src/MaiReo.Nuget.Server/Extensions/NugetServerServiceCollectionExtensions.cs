@@ -10,6 +10,7 @@ namespace Microsoft.Extensions.DependencyInjection
             Action<NugetServerOptions> setupAction = null)
         {
             return services
+            .AddNugetServerCache()
             .AddNugetServerPackagePublish()
             .AddNugetServerPackageBaseAddress()
             .AddNugetServerRegistrationsBaseUrl()

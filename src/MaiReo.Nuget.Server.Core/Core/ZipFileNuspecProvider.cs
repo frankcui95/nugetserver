@@ -17,9 +17,9 @@ namespace MaiReo.Nuget.Server.Core
 
         private readonly INupkgProvider _nupkgProvider;
 
-        public virtual IEnumerable<Nuspec> GetAll( Func<string, bool> predicate = null )
+        public virtual IEnumerable<Nuspec> GetAll()
         {
-            foreach (var filePath in _nupkgProvider.GetAll( predicate ))
+            foreach (var filePath in _nupkgProvider.GetAll())
             {
                 var nuspec = Zip.ReadNuspec( filePath );
                 nuspec.FilePath = filePath;

@@ -5,9 +5,9 @@ using System.ComponentModel;
 
 namespace MaiReo.Nuget.Server.Core
 {
-    [EditorBrowsable(EditorBrowsableState.Never)]
+    [EditorBrowsable( EditorBrowsableState.Never )]
     public interface INuspecProvider
     {
-        IEnumerable<Nuspec> GetAll(Func<string, bool> predicate = null);
+        IEnumerable<Nuspec> GetAll();
     }
 }
