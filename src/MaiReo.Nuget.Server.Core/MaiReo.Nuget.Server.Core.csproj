@@ -6,7 +6,7 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>../../MaiReo.Nuget.Server.pfx</AssemblyOriginatorKeyFile>
     <Copyright>MaiReo</Copyright>
-    <Description>Nuget API v3.</Description>
+    <Description>Nuget API v3 Core.</Description>
     <Authors>MaiReo</Authors>
     <Company />
     <PackageProjectUrl>https://github.com/MaiReo/nugetserver</PackageProjectUrl>
