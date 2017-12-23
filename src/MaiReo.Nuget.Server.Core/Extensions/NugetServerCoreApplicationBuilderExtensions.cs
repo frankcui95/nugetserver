@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 namespace Microsoft.AspNetCore.Builder
 
 {
-    public static class ApplicationBuilderExtensions
+    public static class NugetServerCoreApplicationBuilderExtensions
     {
         public static IApplicationBuilder UseNugetServerCore(
             this IApplicationBuilder app )

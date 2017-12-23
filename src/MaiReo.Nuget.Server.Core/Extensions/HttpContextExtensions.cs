@@ -14,11 +14,11 @@ using System.Collections;
 
 namespace Microsoft.AspNetCore.Http
 {
-    [EditorBrowsable(EditorBrowsableState.Never)]
+    [EditorBrowsable( EditorBrowsableState.Never )]
     public static class HttpContextExtensions
     {
         public static T FromQueryString<T>(
-            this HttpContext context)
+            this HttpContext context )
             where T : class, new()
             =>
             context.Request.Query.As<T>();
@@ -30,44 +30,45 @@ namespace Microsoft.AspNetCore.Http
         /// <param name="context"></param>
         /// <returns></returns>
         public static string GetBaseUrl(
-            this HttpContext context)
+            this HttpContext context )
             =>
             context.Request.Scheme +
             "://" +
             context.Request.Host;
 
+
         public static bool IsRequestingUrls(
             this HttpContext context,
-            IEnumerable<PathString> urls)
+            IEnumerable<PathString> urls )
             =>
             urls?.Any() == true
-            ? context.Request.Path.In(urls, (x, y) => x.StartsWithSegments(y))
+            ? context.Request.Path.In( urls, ( x, y ) => x.StartsWithSegments( y ) )
             : context.IsRequestingRootUrl();
 
         public static bool IsRequestingUrl(
             this HttpContext context,
-            PathString url)
+            PathString url )
             =>
             url.HasValue
 
-            ? context.Request.Path.StartsWithSegments(url)
+            ? context.Request.Path.StartsWithSegments( url )
             : context.IsRequestingRootUrl();
 
         public static bool IsRequestingRootUrl(
-            this HttpContext context)
+            this HttpContext context )
             =>
             context
             .Request
             .Path == "/";
 
         public static bool IsRequestingWithExtensionName(
-            this HttpContext context, string extensionName)
+            this HttpContext context, string extensionName )
             =>
-            string.IsNullOrWhiteSpace(extensionName)
+            string.IsNullOrWhiteSpace( extensionName )
             ? false
             : context.Request.Path
             .ToString()
-            .EndsWith(extensionName,StringComparison.InvariantCultureIgnoreCase);
+            .EndsWith( extensionName, StringComparison.InvariantCultureIgnoreCase );
     }
 
 }

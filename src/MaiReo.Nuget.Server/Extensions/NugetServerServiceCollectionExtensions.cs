@@ -12,6 +12,7 @@ namespace Microsoft.Extensions.DependencyInjection
             return services
             .AddNugetServerCache()
             .AddNugetServerPackagePublish()
+            .AddNugetServerPackagePublishV2Compatible()
             .AddNugetServerPackageBaseAddress()
             .AddNugetServerRegistrationsBaseUrl()
             .AddNugetServerSearchQueryService()

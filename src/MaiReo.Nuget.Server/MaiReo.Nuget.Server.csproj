@@ -4,6 +4,7 @@
     <ProjectReference Include="..\MaiReo.Nuget.Server.Cache\MaiReo.Nuget.Server.Cache.csproj" />
     <ProjectReference Include="..\MaiReo.Nuget.Server.Core\MaiReo.Nuget.Server.Core.csproj" />
     <ProjectReference Include="..\MaiReo.Nuget.Server.PackageBaseAddress\MaiReo.Nuget.Server.PackageBaseAddress.csproj" />
+    <ProjectReference Include="..\MaiReo.Nuget.Server.PackagePublish.V2Compatible\MaiReo.Nuget.Server.PackagePublish.V2Compatible.csproj" />
     <ProjectReference Include="..\MaiReo.Nuget.Server.PackagePublish\MaiReo.Nuget.Server.PackagePublish.csproj" />
     <ProjectReference Include="..\MaiReo.Nuget.Server.RegistrationsBaseUrl\MaiReo.Nuget.Server.RegistrationsBaseUrl.csproj" />
     <ProjectReference Include="..\MaiReo.Nuget.Server.SearchQueryService\MaiReo.Nuget.Server.SearchQueryService.csproj" />
@@ -27,7 +28,9 @@
     <PackageReleaseNotes>Nuget server that contains API and gallery, but there is no plan for gallery currently.</PackageReleaseNotes>
     <PackageTags>nuget,nuget-server</PackageTags>
     <PackageIconUrl>https://raw.githubusercontent.com/MaiReo/nugetserver/master/icon.ico</PackageIconUrl>
-    <Version>1.0.4</Version>
+    <Version>1.1.1</Version>
+    <AssemblyVersion>1.1.1.0</AssemblyVersion>
+    <FileVersion>1.1.1.0</FileVersion>
   </PropertyGroup>
 
 </Project>

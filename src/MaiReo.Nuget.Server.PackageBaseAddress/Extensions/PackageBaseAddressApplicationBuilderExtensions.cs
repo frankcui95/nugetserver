@@ -2,7 +2,7 @@
 
 namespace Microsoft.AspNetCore.Builder
 {
-    public static class ApplicationBuilderExtensions
+    public static class PackageBaseAddressApplicationBuilderExtensions
     {
         public static IApplicationBuilder UseNugetServerPackageBaseAddress(
             this IApplicationBuilder app)

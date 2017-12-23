@@ -18,6 +18,34 @@ namespace MaiReo.Nuget.Server.Core
     [EditorBrowsable( EditorBrowsableState.Never )]
     public static class NugetServerProviderExtensions
     {
+
+        public static void
+        RedirectToCurrentApiVersion(
+             this INugetServerProvider provider,
+             HttpContext context,
+             bool permanent = true )
+        {
+            var currentVersion = provider.GetApiMajorVersionUrl();
+            var paths = context.Request.Path
+                .ToString()
+                .Split( new[] { '/' },
+                    StringSplitOptions.RemoveEmptyEntries );
+            string newPath = currentVersion;
+            if (paths.Length > 0)
+            {
+                var otherPaths = paths.Skip( 1 );
+                if (otherPaths.Any())
+                {
+                    newPath = newPath + "/" + string.Join( "/", otherPaths );
+                }
+            }
+            if (context.Request.QueryString.HasValue)
+            {
+                newPath += context.Request.QueryString.Value;
+            }
+            context.Response.Redirect( newPath, permanent );
+        }
+
         public static JsonSerializer CreateJsonSerializer(
             this INugetServerProvider provider )
         {
@@ -203,6 +231,8 @@ namespace MaiReo.Nuget.Server.Core
             }
             return majorVersion + path;
         }
+
+
         public static IEnumerable<PathString> GetResourceUrlPaths(
             this INugetServerProvider provider,
             params NugetServerResourceType[] resourceTypes ) =>
@@ -232,6 +262,29 @@ namespace MaiReo.Nuget.Server.Core
             => context
                 .IsRequestingUrl( provider
                 .GetResourceUrlPath( resourceType ) );
+
+        public static bool IsMatchResourceIgnoreApiVersion(
+            this INugetServerProvider provider,
+            HttpContext context,
+            NugetServerResourceType resourceType )
+        {
+            var currentPath = provider
+                   .GetResourceUrlPath( resourceType );
+            var directPath = provider
+                   .GetResourceValue( resourceType );
+            var v2Path = ((PathString)"/v2").Add( directPath );
+            var apiV2Path = ((PathString)"/api").Add( v2Path );
+            return context
+                .IsRequestingUrls(
+                  new[]
+                  {
+                      currentPath,
+                      directPath,
+                      v2Path,
+                      apiV2Path
+                  } );
+        }
+
 
         public static bool IsMatchExtensionName(
             this INugetServerProvider provider,

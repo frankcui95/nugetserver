@@ -11,13 +11,14 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MaiReo.Nuget.Server.SearchQueryService
+namespace MaiReo.Nuget.Server.Extensions
 {
     [EditorBrowsable(EditorBrowsableState.Never)]
     public static class
-    NugetServerProviderExtensions
+    SearchQueryServiceNugetServerProviderExtensions
     {
-        public static async Task RespondAsync(
+        public static async Task 
+        RespondSearchQueryServiceAsync(
             this INugetServerProvider provider,
             HttpContext context)
         {
@@ -25,7 +26,8 @@ namespace MaiReo.Nuget.Server.SearchQueryService
                 provider.GetResourceUrlPath(
                     NugetServerResourceType.RegistrationsBaseUrl);
 
-            var searchInputModel = context.FromQueryString<SearchInputModel>();
+            var searchInputModel = context.FromQueryString
+                <SearchInputModel>();
             var searchOutputModel = new SearchOutputModel();
 
             var metadata_versions =
@@ -35,7 +37,8 @@ namespace MaiReo.Nuget.Server.SearchQueryService
                 .Select(nuspec => new
                 {
                     nuspec.Metadata,
-                    Version = (NuGetVersionString)nuspec.Metadata.Version
+                    Version = (NuGetVersionString)
+                        nuspec.Metadata.Version
                 })
                 .Where(mv =>
                     searchInputModel.SemVerLevel?.Major != 1
@@ -47,20 +50,25 @@ namespace MaiReo.Nuget.Server.SearchQueryService
                     : !mv.Version.IsPrerelease)
                 .OrderBy(mv => mv.Metadata.Id)
                 .GroupBy(mv => mv.Metadata.Id)
-                .Where(mv => string.IsNullOrWhiteSpace(searchInputModel.Q)
-                    || mv.Key.ToLowerInvariant().Contains(searchInputModel.Q.ToLowerInvariant()))
+                .Where(mv => string.IsNullOrWhiteSpace(
+                    searchInputModel.Q)
+                    || mv.Key.ToLowerInvariant()
+                        .Contains(searchInputModel.Q
+                            .ToLowerInvariant()))
                 .ToList();
             var takes = metadata_versions
                 .Skip(searchInputModel.Skip)
                 .Take(searchInputModel.Take)
                 .ToList();
 
-            searchOutputModel.TotalHits = metadata_versions.Count;
+            searchOutputModel.TotalHits = 
+                metadata_versions.Count;
 
             foreach (var path_metadata in takes)
             {
                 var packageId = path_metadata.Key;
-                var packageIdLowerInvariant = packageId.ToLowerInvariant();
+                var packageIdLowerInvariant = 
+                        packageId.ToLowerInvariant();
 
                 var metadatas = path_metadata
                     .Select(x => x.Metadata)
@@ -84,7 +92,8 @@ namespace MaiReo.Nuget.Server.SearchQueryService
                     IconUrl = latest.IconUrl,
                     Registration = $"{registrationsBaseUrl}/{packageIdLowerInvariant}/index.json",
                     Id_alias = $"{registrationsBaseUrl}/{packageIdLowerInvariant}/index.json",
-                    Summary = latest.ReleaseNotes ?? latest.Description,
+                    Summary = latest.ReleaseNotes 
+                        ?? latest.Description,
                     Tags = latest.Tags?.Split(
                         new[] { ',' },
                         StringSplitOptions.RemoveEmptyEntries)
@@ -92,17 +101,20 @@ namespace MaiReo.Nuget.Server.SearchQueryService
                     Title = latest.Id,
                     Version = (NuGetVersionString)latest.Version,
                     LicenseUrl = latest.LicenseUrl,
-                    Versions = metadatas.Select(m => new SearchResultPackageVersionModel
+                    Versions = metadatas.Select(m => new 
+                    SearchResultPackageVersionModel
                     {
                         Id = $"{registrationsBaseUrl}/{packageIdLowerInvariant}/{m.Version}.json",
                         Version = (NuGetVersionString)m.Version
                     }).ToList(),
                 });
             }
-            await provider.WriteJsonResponseAsync(context, searchOutputModel);
+            await provider
+                  .WriteJsonResponseAsync(
+                    context,searchOutputModel);
         }
 
-        public static bool IsMatch(
+        public static bool IsMatchSearchQueryService(
             this INugetServerProvider provider,
             HttpContext context)
         {
@@ -115,9 +127,12 @@ namespace MaiReo.Nuget.Server.SearchQueryService
 
             return provider.IsMatchResources(
                 context,
-                NugetServerResourceType.SearchQueryService,
-                NugetServerResourceType.SearchQueryService_3_0_0_beta,
-                NugetServerResourceType.SearchQueryService_3_0_0_rc
+                NugetServerResourceType
+                    .SearchQueryService,
+                NugetServerResourceType
+                    .SearchQueryService_3_0_0_beta,
+                NugetServerResourceType
+                    .SearchQueryService_3_0_0_rc
                 );
         }
 

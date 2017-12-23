@@ -2,7 +2,7 @@
 
 namespace Microsoft.AspNetCore.Builder
 {
-    public static class ApplicationBuilderExtensions
+    public static class RegistrationsBaseUrlApplicationBuilderExtensions
     {
         public static IApplicationBuilder
         UseNugetServerRegistrationsBaseUrl(

@@ -10,12 +10,12 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MaiReo.Nuget.Server.PackageBaseAddress
+namespace MaiReo.Nuget.Server.Extensions
 {
     [EditorBrowsable( EditorBrowsableState.Never )]
-    public static class NugetServerProviderExtensions
+    public static class PackageBaseAddressNugetServerProviderExtensions
     {
-        public static async Task RespondAsync(
+        public static async Task RespondPackageBaseAddressAsync(
             this INugetServerProvider provider,
             HttpContext context )
         {
@@ -45,7 +45,7 @@ namespace MaiReo.Nuget.Server.PackageBaseAddress
 
             provider.RespondNotFound( context );
         }
-        public static async Task RespondNuspecAsync(
+        private static async Task RespondNuspecAsync(
             this INugetServerProvider provider,
             HttpContext context,
             PackageBaseAddressInputModel request )
@@ -60,7 +60,7 @@ namespace MaiReo.Nuget.Server.PackageBaseAddress
             await provider.WriteRawResponseAsync(
                 context, "application/xml; charset=utf8", nuspecRaw );
         }
-        public static async Task RespondVersionsAsync(
+        private static async Task RespondVersionsAsync(
             this INugetServerProvider provider,
             HttpContext context,
             PackageBaseAddressInputModel request )
@@ -78,7 +78,7 @@ namespace MaiReo.Nuget.Server.PackageBaseAddress
             await provider.WriteJsonResponseAsync( context, model );
         }
 
-        public static async Task RespondNupkgAsync(
+        private static async Task RespondNupkgAsync(
             this INugetServerProvider provider,
             HttpContext context,
             PackageBaseAddressInputModel request )
@@ -102,7 +102,7 @@ namespace MaiReo.Nuget.Server.PackageBaseAddress
                 fileInfo, context.RequestAborted );
         }
 
-        public static PackageBaseAddressInputModel
+        private static PackageBaseAddressInputModel
             GetRequstingPackageBaseAddressModel(
             this INugetServerProvider provider,
             HttpContext context )
@@ -111,7 +111,7 @@ namespace MaiReo.Nuget.Server.PackageBaseAddress
                 provider.GetResourceUrlPath(
                 NugetServerResourceType.PackageBaseAddress ) );
 
-        public static bool IsMatch(
+        public static bool IsMatchPackageBaseAddress(
             this INugetServerProvider provider,
             HttpContext context
             )

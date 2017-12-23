@@ -15,23 +15,28 @@ using System.Threading.Tasks;
 namespace MaiReo.Nuget.Server.ServerIndex
 {
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public static class NugetServerProviderExtensions
+    public static class ServerIndexNugetServerProviderExtensions
     {
-        public static async Task RespondAsync(
+        public static async Task RespondServerIndexAsync(
             this INugetServerProvider provider,
             HttpContext context)
         {
             var serverIndex = new ServerIndexModel(
                 provider.ParseResource(context))
             {
-                Version = provider.NugetServerOptions.ApiVersion.ToFullString(),
+                Version = provider
+                    .NugetServerOptions
+                    .ApiVersion
+                    .ToFullString(),
                 Context = ServerIndexContext.Default
             };
-            await provider.WriteJsonResponseAsync(context, serverIndex, provider
-                .CreateJsonSerializerForServiceIndex());
+            await provider
+                  .WriteJsonResponseAsync(
+                    context, serverIndex, provider
+                  .CreateJsonSerializerForServiceIndex());
         }
 
-        public static JsonSerializer
+        private static JsonSerializer
         CreateJsonSerializerForServiceIndex(
             this INugetServerProvider provider)
         {
@@ -41,8 +46,9 @@ namespace MaiReo.Nuget.Server.ServerIndex
             return serializer;
         }
 
-        public static IEnumerable<ServerIndexResourceModel>
-        ParseResource(this INugetServerProvider provider, HttpContext context)
+        private static IEnumerable<ServerIndexResourceModel>
+        ParseResource(this INugetServerProvider provider,
+            HttpContext context)
         {
             var resources = provider
                 ?.NugetServerOptions
@@ -61,16 +67,18 @@ namespace MaiReo.Nuget.Server.ServerIndex
                 var model = new ServerIndexResourceModel
                 {
                     Type = resource.GetText(),
-                    Id = baseUrl + provider.GetResourceUrlPath(resource)
+                    Id = baseUrl + provider
+                        .GetResourceUrlPath(resource)
                 }; ;
                 yield return model;
             }
         }
 
-        public static PathString GetServiceIndexUrlPath(
+        private static PathString GetServiceIndexUrlPath(
             this INugetServerProvider provider)
         {
-            var majorVersion = provider.GetApiMajorVersionUrl();
+            var majorVersion = provider
+                .GetApiMajorVersionUrl();
 
             var path = provider
                 ?.NugetServerOptions
@@ -81,7 +89,7 @@ namespace MaiReo.Nuget.Server.ServerIndex
             return majorVersion + path;
         }
 
-        public static bool IsMatch(
+        public static bool IsMatchServerIndex(
             this INugetServerProvider provider,
             HttpContext context)
         {
@@ -94,7 +102,8 @@ namespace MaiReo.Nuget.Server.ServerIndex
 
             return provider.IsMatchPath(context,
                 provider.GetServiceIndexUrlPath())
-                && provider.IsMatchExtensionName(context, ".json");
+                && provider
+                .IsMatchExtensionName(context, ".json");
         }
     }
 }

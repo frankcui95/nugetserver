@@ -21,10 +21,10 @@ namespace MaiReo.Nuget.Server.Middlewares
             HttpContext context,
             RequestDelegate next)
         {
-            if (_nugetServerProvider.IsMatch(context))
+            if (_nugetServerProvider.IsMatchServerIndex(context))
             {
                 await _nugetServerProvider
-                      .RespondAsync(context);
+                      .RespondServerIndexAsync(context);
                 return;
             }
 

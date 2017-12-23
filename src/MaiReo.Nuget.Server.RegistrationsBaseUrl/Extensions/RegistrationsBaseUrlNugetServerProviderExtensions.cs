@@ -9,12 +9,12 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MaiReo.Nuget.Server.RegistrationsBaseUrl
+namespace MaiReo.Nuget.Server.Extensions
 {
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public static class NugetServerProviderExtensions
+    public static class RegistrationsBaseUrlNugetServerProviderExtensions
     {
-        public static async Task RespondAsync(
+        public static async Task RespondRegistrationsBaseUrlAsync(
             this INugetServerProvider provider,
             HttpContext context)
         {
@@ -66,7 +66,7 @@ namespace MaiReo.Nuget.Server.RegistrationsBaseUrl
             provider.RespondNotFound(context);
         }
 
-        public static async Task RespondRegistrationIndexAsync(
+        private static async Task RespondRegistrationIndexAsync(
             this INugetServerProvider provider,
             HttpContext context,
             RegistrationInputModel registrationInput,
@@ -170,7 +170,7 @@ namespace MaiReo.Nuget.Server.RegistrationsBaseUrl
         }
 
 
-        public static RegistrationInputModel GetRequestingMetadata(
+        private static RegistrationInputModel GetRequestingMetadata(
             this INugetServerProvider provider,
             HttpContext context)
         {
@@ -180,7 +180,7 @@ namespace MaiReo.Nuget.Server.RegistrationsBaseUrl
             return model;
         }
 
-        public static bool IsMatch(
+        public static bool IsMatchRegistrationsBaseUrl(
             this INugetServerProvider provider,
             HttpContext context)
         {

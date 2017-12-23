@@ -10,12 +10,12 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace MaiReo.Nuget.Server.PackagePublish
+namespace MaiReo.Nuget.Server.Extensions
 {
     [EditorBrowsable( EditorBrowsableState.Never )]
-    public static class NugetServerProviderExtensions
+    public static class PackagePublishNugetServerProviderExtensions
     {
-        public static async Task RespondAsync(
+        public static async Task RespondPackagePublishAsync(
             this INugetServerProvider provider,
             HttpContext context )
         {
@@ -45,7 +45,7 @@ namespace MaiReo.Nuget.Server.PackagePublish
             provider.RespondNotFound( context );
         }
 
-        public static async Task
+        private static async Task
         RespondPutPackageAsync(
            this INugetServerProvider provider,
            HttpContext context,
@@ -129,7 +129,7 @@ namespace MaiReo.Nuget.Server.PackagePublish
                 HttpStatusCode.InternalServerError );
         }
 
-        public static async Task
+        private static async Task
         RespondDeletePackageAsync(
            this INugetServerProvider provider,
            HttpContext context,
@@ -162,14 +162,14 @@ namespace MaiReo.Nuget.Server.PackagePublish
             }
         }
 
-        public static bool IsValidApiKey(
+        private static bool IsValidApiKey(
             this INugetServerProvider provider,
             PackageInputModel request )
             => string.Equals(
                 provider?.NugetServerOptions?.ApiKey,
                 request?.ApiKey );
 
-        public static PackageInputModel
+        private static PackageInputModel
         GetRequestingModel(
             this INugetServerProvider provider,
             HttpContext context )
@@ -179,7 +179,7 @@ namespace MaiReo.Nuget.Server.PackagePublish
                 context.Request.Path );
 
 
-        public static bool IsMatch(
+        public static bool IsMatchPackagePublish(
             this INugetServerProvider provider,
             HttpContext context )
         {
