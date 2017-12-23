@@ -17,8 +17,8 @@
     <RootNamespace>MaiReo.Nuget.Server</RootNamespace>
     <PackageIconUrl>https://raw.githubusercontent.com/MaiReo/nugetserver/master/icon.ico</PackageIconUrl>
     <DelaySign>false</DelaySign>
-    <Version>1.1.2</Version>
-    <AssemblyVersion>1.1.2.0</AssemblyVersion>
+    <Version>1.1.1</Version>
+    <AssemblyVersion>1.1.1.0</AssemblyVersion>
     <FileVersion>1.1.2.0</FileVersion>
   </PropertyGroup>
 
